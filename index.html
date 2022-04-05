@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Downscale SVS</title>
+</head>
+<body>
+    <pre id="epibox_msg"></pre>
+    <button onclick="epibox.login()">Login</button>
+    <button onclick="epibox.checkToken()">Check</button>
+    <button onclick="epibox.refreshToken()">Refresh</button>
+    <button onclick="(async function(){await epibox.getUser();if(epibox.oauth){epibox.msg(JSON.stringify(epibox.oauth.user,null,3))}})()">User</button>
+    <button onclick="epibox.logout()">Logout</button>
+    <button onclick="localStorage.removeItem('epiboxtoken');location.reload()">Restart</button>
+    <div class="row">
+        <form action="post" id="folderIds">
+            <input type="text" required pattern="^[0-9]{12}$" id="inputFolderId" placeholder="BOX input folder Id">
+            <input type="text" required pattern="^[0-9]{12}$" id="outputFolderId" placeholder="BOX output folder Id">
+            <button type="submit">Submit</button>
+        </form>
+        <div class="new-line" style="margin-top: 1rem;" id="fileSelectionDiv"></div>
+    </div>
+    <div class="row" id="thumbnailDiv">
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/openseadragon@latest/build/openseadragon/openseadragon.js"></script>
+    <script src="https://episphere.github.io/epibox/epibox.js"></script>
+    <script src="./index.js" type="module"></script>
+</body>
+</html>
