@@ -83,4 +83,5 @@
 
 #sliderValue {
     margin-left: 5px;
+    white-space: nowrap;
 }

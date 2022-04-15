@@ -10,9 +10,28 @@ const initialize = () => {
 const displaySliderValue = () => {
     const myRange = document.getElementById("myRange");
     myRange.addEventListener('input', () => {
-        const value = myRange.value === '0' ? '1x' : myRange.value+'x';
+        const value = myRange.value === '0' ? '1 image' : myRange.value+' tiles';
         document.getElementById('sliderValue').innerHTML = value;
     });
+}
+
+const magnificationLevel = {
+    8: {
+        rows: 2,
+        cols: 4
+    },
+    16: {
+        rows: 4,
+        cols: 4
+    },
+    24: {
+        rows: 4,
+        cols: 6
+    },
+    32: {
+        rows: 4,
+        cols: 8
+    }
 }
 
 const getFolderIds = () => {
@@ -128,8 +147,11 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
     }
     else {
         const imageRatio = Math.min(imageInfo.width, imageInfo.height) / Math.max(imageInfo.width, imageInfo.height);
-        const rows = imageRatio > 0.5 ? 2 : 1;
-        const cols = 4;
+        
+        // const rows = imageRatio > 0.5 ? 2 : 1; 
+        // const cols = 4;
+        const rows = magnificationLevel[magnification].rows;
+        const cols = magnificationLevel[magnification].cols;
         const xys = generateXYs(rows, cols, imageInfo.height, imageInfo.width);
         let heightIncrements = Math.floor(imageInfo.height / rows);
         let widthIncrements = Math.floor(imageInfo.width / cols);
