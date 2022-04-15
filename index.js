@@ -48,6 +48,22 @@ const magnificationLevel = {
         rows: 8,
         cols: 8
     },
+    72: {
+        rows: 8,
+        cols: 9
+    },
+    80: {
+        rows: 8,
+        cols: 10
+    },
+    88: {
+        rows: 8,
+        cols: 11
+    },
+    96: {
+        rows: 8,
+        cols: 12
+    }
 
 }
 
@@ -152,7 +168,7 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
     const div = document.createElement('div');
     div.id = 'uploadImageButon'
     div.classList = 'mr-bottom-10';
-    div.innerHTML = `<button id="uploadImage">Upload image to BOX</button>`;
+    div.innerHTML = `<button id="uploadImage">Upload to BOX</button>`;
     thumbnailDiv.appendChild(div);
     const canvases = Array.from(document.getElementsByClassName('uploadCanvas'));
     canvases.forEach(canvas => {
