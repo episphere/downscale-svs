@@ -187,8 +187,8 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
         const imageDiv = document.createElement('div');
         imageDiv.classList = 'row';
         imageDiv.id = 'imageDiv';
-        imageDiv.style.width = `${132*cols}px`;
-        imageDiv.style.height = `${132*rows}px`;
+        imageDiv.style.width = `${138*cols}px`;
+        imageDiv.style.height = `${138*rows}px`;
         document.body.appendChild(imageDiv);
         const xys = generateXYs(rows, cols, imageInfo.height, imageInfo.width);
         let heightIncrements = Math.floor(imageInfo.height / rows);
@@ -207,6 +207,10 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
             const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpeg';
             canvasHandler(tileBlob, fileName, tileParams.tileSize, 512, imageDiv, true);
         }
+        setTimeout(() => {
+            // because last canvas rendering takes some time
+            canvasEvents();
+        },2000);
         handleImageUpload(imageDiv);
     }
 }
@@ -236,14 +240,25 @@ const canvasHandler = (blob, fileName, desiredResolution, hiddenTileResolution, 
         if(smallerImage) canvas.classList.add("tile-thumbnail")
         else canvas.classList.add('whole-image');
         thumbnailDiv.appendChild(canvas);
-        
-        // const dataURL = canvas.toDataURL(blob.type);
-        // const img2 = document.createElement('img');
-        // if(smallerImage) img2.className = "tile-thumbnail"
-        // else img2.className = 'whole-image';
-        // img2.src = dataURL;
-        // thumbnailDiv.appendChild(img2);
     }
+}
+
+const canvasEvents = () => {
+    const canvases = Array.from(document.querySelectorAll('canvas'));
+    console.log(canvases.length);
+    canvases.forEach(canvas => {
+        canvas.addEventListener('click', e => {
+            e.stopPropagation();
+            console.log(canvas)
+            if(canvas.classList.contains('tile-thumbnail-selected')) {
+                canvas.classList.remove('tile-thumbnail-selected');
+            }
+            else {
+                canvas.classList.add('tile-thumbnail-selected');
+            }
+        });
+    });
+
 }
 
 const generateXYs = (rows, cols, height, width) => {
