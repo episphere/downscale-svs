@@ -4,6 +4,15 @@ const initialize = () => {
     epibox.ini();
     if(!localStorage.epiBoxToken) return;
     getFolderIds();
+    displaySliderValue();
+}
+
+const displaySliderValue = () => {
+    const myRange = document.getElementById("myRange");
+    myRange.addEventListener('input', () => {
+        const value = myRange.value === '0' ? '1x' : myRange.value+'x';
+        document.getElementById('sliderValue').innerHTML = value;
+    });
 }
 
 const getFolderIds = () => {
@@ -91,7 +100,7 @@ const getFolderItems = async (accessToken, folderId) => {
 }
 
 const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
-    const radio = Array.from(document.getElementsByName('imageResolution')).filter(dt => dt.checked)[0].value;
+    const magnification = document.getElementById("myRange").value;
     document.getElementById('loaderDiv').remove();
 
     const thumbnailDiv = document.createElement('div');
@@ -108,7 +117,7 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
     canvases.forEach(canvas => {
         canvas.remove();
     })
-    if(radio === 'lowRes') {
+    if(magnification === '0') {
         const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: 4096})).blob();
         const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'.jpeg';
         canvasHandler(blob, fileName, 512, 4096, thumbnailDiv);

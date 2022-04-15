@@ -20,14 +20,10 @@
             <input type="text" required pattern="^[0-9]{12}$" id="inputFolderId" value="156562380907" placeholder="BOX input folder Id">
             <input type="text" required pattern="^[0-9]{12}$" id="outputFolderId" value="160906438490" placeholder="BOX output folder Id">
             
-            <div class="mr-top-10">
-                <input required type="radio" name="imageResolution" value="lowRes" id="res1">
-                <label for="res1">1x Tile</label>
-            </br>
-                <input required type="radio" name="imageResolution" value="highRes" id="res2">
-                <label for="res2">5x Tile</label>
+            <div class="slidecontainer mr-top-10 mr-bottom-10">
+                <input type="range" min="0" max="5" value="5" step="5" class="slider" id="myRange">
+                <span id="sliderValue">5x</span>
             </div>
-            <br>
             <button type="submit">Submit</button>
         </form>
         <div class="new-line" style="margin-top: 1rem;" id="fileSelectionDiv"></div>
