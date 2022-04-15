@@ -256,7 +256,7 @@ const canvasEvents = () => {
             }
 
             const selectedTiles = Array.from(document.querySelectorAll('.tile-thumbnail-selected'));
-            if(selectedTiles.length > 0) document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length} tiles to BOX`;
+            if(selectedTiles.length > 0) document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length} tile(s) to BOX`;
             else document.getElementById('uploadImage').innerHTML = `Upload all tiles to BOX`;
         });
     });
