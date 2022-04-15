@@ -104,6 +104,10 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
     div.classList = 'mr-bottom-10';
     div.innerHTML = `<button id="uploadImage">Upload image to BOX</button>`;
     thumbnailDiv.appendChild(div);
+    const canvases = Array.from(document.getElementsByClassName('uploadCanvas'));
+    canvases.forEach(canvas => {
+        canvas.remove();
+    })
     if(radio === 'lowRes') {
         const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: 4096})).blob();
         const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'.jpeg';
