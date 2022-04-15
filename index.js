@@ -49,14 +49,6 @@ const renderFileSelection = (files, accessToken) => {
         select.appendChild(option);
     });
     div.appendChild(select);
-    if(document.getElementById('uploadImageButon')) document.getElementById('uploadImageButon').remove();
-    if(document.getElementById('thumbnailDiv')) document.getElementById('thumbnailDiv').remove();
-    if(document.getElementById('loaderDiv')) document.getElementById('thumbnailDiv').remove();
-    const loaderDiv = document.createElement('div');
-    loaderDiv.id = 'loaderDiv';
-    loaderDiv.classList = 'row';
-    loaderDiv.innerHTML += '<div class="loader"></div>';
-    document.body.appendChild(loaderDiv);
     tileHandle(accessToken, select.value, files);
     onFileSelectionChange(accessToken, files);
 }
@@ -64,13 +56,25 @@ const renderFileSelection = (files, accessToken) => {
 const onFileSelectionChange = (accessToken, files) => {
     const select = document.getElementById('fileSelection');
     select.addEventListener('change', () => {
-        document.getElementById('thumbnailDiv').innerHTML = '<div class="loader"></div>';
+        const loaderDiv = document.createElement('div');
+        loaderDiv.id = 'loaderDiv';
+        loaderDiv.classList = 'row';
+        loaderDiv.innerHTML += '<div class="loader"></div>';
+        document.body.appendChild(loaderDiv);
         const fileId = select.value;
         tileHandle(accessToken, fileId, files);
     })
 }
 
 const tileHandle = async (accessToken, fileId, files) => {
+    if(document.getElementById('uploadImageButon')) document.getElementById('uploadImageButon').remove();
+    if(document.getElementById('thumbnailDiv')) document.getElementById('thumbnailDiv').remove();
+    if(document.getElementById('loaderDiv')) document.getElementById('loaderDiv').remove();
+    const loaderDiv = document.createElement('div');
+    loaderDiv.id = 'loaderDiv';
+    loaderDiv.classList = 'row';
+    loaderDiv.innerHTML += '<div class="loader"></div>';
+    document.body.appendChild(loaderDiv);
     const fileName = files.filter(dt => dt.id === fileId)[0].name;
     const imageURL = await getDownloadURL(accessToken, fileId);
     let imageInfo = null;
@@ -101,7 +105,7 @@ const getFolderItems = async (accessToken, folderId) => {
 
 const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
     const magnification = document.getElementById("myRange").value;
-    document.getElementById('loaderDiv').remove();
+    if(document.getElementById('loaderDiv')) document.getElementById('loaderDiv').remove();
 
     const thumbnailDiv = document.createElement('div');
     thumbnailDiv.id = 'thumbnailDiv';
