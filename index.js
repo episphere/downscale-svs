@@ -105,6 +105,7 @@ const onFileSelectionChange = (accessToken, files) => {
 const tileHandle = async (accessToken, fileId, files) => {
     if(document.getElementById('uploadImageButon')) document.getElementById('uploadImageButon').remove();
     if(document.getElementById('thumbnailDiv')) document.getElementById('thumbnailDiv').remove();
+    if(document.getElementById('imageDiv')) document.getElementById('imageDiv').remove();
     if(document.getElementById('loaderDiv')) document.getElementById('loaderDiv').remove();
     const loaderDiv = document.createElement('div');
     loaderDiv.id = 'loaderDiv';
@@ -169,6 +170,12 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
         // const cols = 4;
         const rows = magnificationLevel[magnification].rows;
         const cols = magnificationLevel[magnification].cols;
+        const imageDiv = document.createElement('div');
+        imageDiv.classList = 'row';
+        imageDiv.id = 'imageDiv';
+        imageDiv.style.width = `${82*cols}px`;
+        imageDiv.style.height = `${82*rows}px`;
+        document.body.appendChild(imageDiv);
         const xys = generateXYs(rows, cols, imageInfo.height, imageInfo.width);
         let heightIncrements = Math.floor(imageInfo.height / rows);
         let widthIncrements = Math.floor(imageInfo.width / cols);
@@ -184,7 +191,7 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
             };
             const tileBlob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
             const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpeg';
-            canvasHandler(tileBlob, fileName, tileParams.tileSize, 512, thumbnailDiv);
+            canvasHandler(tileBlob, fileName, tileParams.tileSize, 512, imageDiv);
         }
     }
     handleImageUpload();
