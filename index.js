@@ -40,7 +40,14 @@ const renderFileSelection = (files, accessToken) => {
         select.appendChild(option);
     });
     div.appendChild(select);
-    document.getElementById('thumbnailDiv').innerHTML = '<div class="loader"></div>';
+    if(document.getElementById('uploadImageButon')) document.getElementById('uploadImageButon').remove();
+    if(document.getElementById('thumbnailDiv')) document.getElementById('thumbnailDiv').remove();
+    if(document.getElementById('loaderDiv')) document.getElementById('thumbnailDiv').remove();
+    const loaderDiv = document.createElement('div');
+    loaderDiv.id = 'loaderDiv';
+    loaderDiv.classList = 'row';
+    loaderDiv.innerHTML += '<div class="loader"></div>';
+    document.body.appendChild(loaderDiv);
     tileHandle(accessToken, select.value, files);
     onFileSelectionChange(accessToken, files);
 }
@@ -58,7 +65,7 @@ const tileHandle = async (accessToken, fileId, files) => {
     const fileName = files.filter(dt => dt.id === fileId)[0].name;
     const imageURL = await getDownloadURL(accessToken, fileId);
     let imageInfo = null;
-    // imageInfo = await (await imagebox3.getImageInfo(imageURL)).json();
+    imageInfo = await (await imagebox3.getImageInfo(imageURL)).json();
     renderTileThumbnail(imageInfo, imageURL, fileName);
 }
 
@@ -83,18 +90,52 @@ const getFolderItems = async (accessToken, folderId) => {
     return response.json();
 }
 
-const renderTileThumbnail = async (imageInfo, imageURL, fileName) => {
-    let maxResolution = 4096;
-    const tileParams = {
-        tileHeight: 512,
-        tileWidth: 512,
-        tileX: 93503,
-        tileY: 14336,
-        tileSize: 256,
-        thumbnailWidthToRender: maxResolution
-    }
+const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
+    const radio = Array.from(document.getElementsByName('imageResolution')).filter(dt => dt.checked)[0].value;
+    document.getElementById('loaderDiv').remove();
+
+    const thumbnailDiv = document.createElement('div');
+    thumbnailDiv.id = 'thumbnailDiv';
+    thumbnailDiv.classList = 'row';
+    document.body.appendChild(thumbnailDiv);
     
-    const blob = await (await imagebox3.getImageThumbnail(imageURL, tileParams)).blob();
+    const div = document.createElement('div');
+    div.id = 'uploadImageButon'
+    div.classList = 'mr-bottom-10';
+    div.innerHTML = `<button id="uploadImage">Upload image to BOX</button>`;
+    thumbnailDiv.appendChild(div);
+    if(radio === 'lowRes') {
+        const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: 4096})).blob();
+        const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'.jpeg';
+        canvasHandler(blob, fileName, 512, 4096, thumbnailDiv);
+    }
+    else {
+        const imageRatio = Math.min(imageInfo.width, imageInfo.height) / Math.max(imageInfo.width, imageInfo.height);
+        const rows = imageRatio > 0.5 ? 2 : 1;
+        const cols = 4;
+        const xys = generateXYs(rows, cols, imageInfo.height, imageInfo.width);
+        let heightIncrements = Math.floor(imageInfo.height / rows);
+        let widthIncrements = Math.floor(imageInfo.width / cols);
+        
+        for(let i = 0; i < xys.length; i++) {
+            let [x, y] = xys[i];
+            let tileParams = {
+                tileSize: 512,
+                tileX: x,
+                tileY: y,
+                tileWidth: widthIncrements,
+                tileHeight: heightIncrements
+            };
+            const tileBlob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
+            const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpeg';
+            canvasHandler(tileBlob, fileName, tileParams.tileSize, 512, thumbnailDiv);
+        }
+    }
+    handleImageUpload();
+}
+
+const canvasHandler = (blob, fileName, desiredResolution, hiddenTileResolution, thumbnailDiv) => {
+    let maxResolution = 4096;
     const response = URL.createObjectURL(blob);
     
     const img = new Image();
@@ -103,7 +144,6 @@ const renderTileThumbnail = async (imageInfo, imageURL, fileName) => {
     img.onload = () => {
         maxResolution = Math.max(img.width, img.height);
         const canvas = document.createElement('canvas');
-        let desiredResolution = 512;
         let ratio = maxResolution / desiredResolution;
         canvas.width = desiredResolution;
         canvas.height = desiredResolution;
@@ -113,25 +153,18 @@ const renderTileThumbnail = async (imageInfo, imageURL, fileName) => {
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, desiredResolution, desiredResolution);
         ctx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
+        
         const dataURL = canvas.toDataURL(blob.type);
         const img2 = document.createElement('img');
         img2.className = "tile-thumbnail"
         img2.src = dataURL;
-
-        const thumbnailDiv = document.getElementById('thumbnailDiv');
-        thumbnailDiv.innerHTML = '';
         thumbnailDiv.appendChild(img2);
-
-        const div = document.createElement('div');
-        div.innerHTML = `<button id="uploadImage">Upload image to BOX</button>`;
-        div.className = "new-line mr-top-10";
-        thumbnailDiv.appendChild(div);
-
         
-        desiredResolution = 4096;
+        desiredResolution = hiddenTileResolution;
         ratio = maxResolution / desiredResolution;
         x = img.width === maxResolution ? 0 : (desiredResolution - img.width/ratio) * 0.5;
         y = img.height === maxResolution ? 0 : (desiredResolution - img.height/ratio) * 0.5;
+        
         const hiddenCanvas = document.createElement('canvas');
         hiddenCanvas.width = desiredResolution;
         hiddenCanvas.height = desiredResolution;
@@ -139,36 +172,56 @@ const renderTileThumbnail = async (imageInfo, imageURL, fileName) => {
         hiddenCtx.fillStyle = 'white';
         hiddenCtx.fillRect(0, 0, desiredResolution, desiredResolution);
         hiddenCtx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
-
-        
-        hiddenCanvas.toBlob((blob) => {
-            handleImageUpload(blob, fileName);
-        }, 'image/jpeg', 1);
+        hiddenCanvas.dataset.fileName = fileName;
+        hiddenCanvas.classList = 'uploadCanvas';
+        document.body.appendChild(hiddenCanvas);
     }
 }
 
-const handleImageUpload = async (blob, fileName) => {
+const generateXYs = (rows, cols, height, width) => {
+    let xys = [];
+    let r = 0;
+    const heightIncrements = Math.floor(height/rows);
+    const widthIncrements = Math.floor(width/cols);
+    while(r < rows) {
+      let c = 0;
+      while(c < cols) {
+        xys.push([c === 0 ? 1 : c * widthIncrements, r === 0 ? 1 : r * heightIncrements]);
+        c++
+      }
+      r++
+    }
+    return xys
+}
+
+const handleImageUpload = async () => {
     const button = document.getElementById('uploadImage');
-    button.addEventListener('click', async () => {
-        fileName = fileName.substring(0, fileName.lastIndexOf('.'))+'.jpeg';
-        const accessToken = JSON.parse(localStorage.epiBoxToken).access_token;
-        const outputFolderId = document.getElementById('outputFolderId').value;
-        const image = new File([blob], fileName, { type: blob.type });
-        const formData = new FormData();
-        formData.append('file', image);
-        formData.append('attributes', `{"name": "${fileName}", "parent": {"id": "${outputFolderId}"}}`);
-        let response = await uploadFile(accessToken, formData);
-        let message = '';
-        if(response.status === 201) message = `${fileName} uploaded successfully</span>`;
-        if(response.status === 409) {
-            const json = await response.json();
-            const existingFileId = json.context_info.conflicts.id;
-            uploadNewVersion(accessToken, existingFileId, formData);
-            message = `${fileName} uploaded new version</span>`;
+    button.addEventListener('click', () => {
+        const canvases = Array.from(document.getElementsByClassName('uploadCanvas'));
+        for(let c = 0; c < canvases.length; c++) {
+            let fileName = canvases[c].dataset.fileName;
+            canvases[c].toBlob(async (blob) => {
+                const accessToken = JSON.parse(localStorage.epiBoxToken).access_token;
+                const outputFolderId = document.getElementById('outputFolderId').value;
+                const image = new File([blob], fileName, { type: blob.type });
+                const formData = new FormData();
+                formData.append('file', image);
+                formData.append('attributes', `{"name": "${fileName}", "parent": {"id": "${outputFolderId}"}}`);
+                let response = await uploadFile(accessToken, formData);
+                let message = '';
+                if(response.status === 201) message = `${fileName} uploaded successfully</span>`;
+                if(response.status === 409) {
+                    const json = await response.json();
+                    const existingFileId = json.context_info.conflicts.id;
+                    uploadNewVersion(accessToken, existingFileId, formData);
+                    message = `${fileName} uploaded new version</span>`;
+                }
+                const p = document.createElement('p');
+                p.innerHTML = `<span class="success">${message}</span>`;
+                document.getElementById('thumbnailDiv').appendChild(p);
+            }, 'image/jpeg', 1);
         }
-        const p = document.createElement('p');
-        p.innerHTML = `<span class="success">${message}</span>`;
-        document.getElementById('thumbnailDiv').appendChild(p);
+        
     })
 }
 

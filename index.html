@@ -17,15 +17,22 @@
     <button onclick="localStorage.removeItem('epiboxtoken');location.reload()">Restart</button>
     <div class="row">
         <form action="post" id="folderIds">
-            <input type="text" required pattern="^[0-9]{12}$" id="inputFolderId" placeholder="BOX input folder Id">
-            <input type="text" required pattern="^[0-9]{12}$" id="outputFolderId" placeholder="BOX output folder Id">
+            <input type="text" required pattern="^[0-9]{12}$" id="inputFolderId" value="156562380907" placeholder="BOX input folder Id">
+            <input type="text" required pattern="^[0-9]{12}$" id="outputFolderId" value="160906438490" placeholder="BOX output folder Id">
+            
+            <div class="mr-top-10">
+                <input required type="radio" name="imageResolution" value="lowRes" id="res1">
+                <label for="res1">1x Tile</label>
+            </br>
+                <input required type="radio" name="imageResolution" value="highRes" id="res2">
+                <label for="res2">5x Tile</label>
+            </div>
+            <br>
             <button type="submit">Submit</button>
         </form>
         <div class="new-line" style="margin-top: 1rem;" id="fileSelectionDiv"></div>
     </div>
-    <div class="row" id="thumbnailDiv">
-        
-    </div>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/openseadragon@latest/build/openseadragon/openseadragon.js"></script>
     <script src="https://episphere.github.io/epibox/epibox.js"></script>
