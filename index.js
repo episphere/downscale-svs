@@ -245,20 +245,21 @@ const canvasHandler = (blob, fileName, desiredResolution, hiddenTileResolution, 
 
 const canvasEvents = () => {
     const canvases = Array.from(document.querySelectorAll('canvas'));
-    console.log(canvases.length);
     canvases.forEach(canvas => {
         canvas.addEventListener('click', e => {
             e.stopPropagation();
-            console.log(canvas)
             if(canvas.classList.contains('tile-thumbnail-selected')) {
                 canvas.classList.remove('tile-thumbnail-selected');
             }
             else {
                 canvas.classList.add('tile-thumbnail-selected');
             }
+
+            const selectedTiles = Array.from(document.querySelectorAll('.tile-thumbnail-selected'));
+            if(selectedTiles.length > 0) document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length} tiles to BOX`;
+            else document.getElementById('uploadImage').innerHTML = `Upload all tiles to BOX`;
         });
     });
-
 }
 
 const generateXYs = (rows, cols, height, width) => {
@@ -280,7 +281,11 @@ const generateXYs = (rows, cols, height, width) => {
 const handleImageUpload = async (thumbnailDiv) => {
     const button = document.getElementById('uploadImage');
     button.addEventListener('click', () => {
-        const canvases = Array.from(document.getElementsByClassName('uploadCanvas'));
+        let canvases;
+        const selectedTiles = Array.from(document.querySelectorAll('.tile-thumbnail-selected'));
+        if(selectedTiles.length > 0) canvases = selectedTiles;
+        else canvases = Array.from(document.getElementsByClassName('uploadCanvas'));
+        
         for(let c = 0; c < canvases.length; c++) {
             let fileName = canvases[c].dataset.fileName;
             canvases[c].toBlob(async (blob) => {
