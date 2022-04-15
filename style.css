@@ -24,7 +24,7 @@
 
 .loader {
     border: 8px solid #f3f3f3;
-    border-top: 8px solid #3498db;
+    border-top: 8px solid #084b77;
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -60,18 +60,18 @@
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    background: #04AA6D;
+    background: #084b77;
     cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    background: #04AA6D;
+    background: #084b77;
     cursor: pointer;
 }
 
