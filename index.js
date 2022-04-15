@@ -10,7 +10,7 @@ const initialize = () => {
 const displaySliderValue = () => {
     const myRange = document.getElementById("myRange");
     myRange.addEventListener('input', () => {
-        const value = myRange.value === '0' ? '1 image (1x)' : myRange.value+' tiles ('+Math.sqrt(myRange.value).toFixed(1)+'x)';
+        const value = myRange.value === '0' ? 'whole image (1x)' : myRange.value+' tiles ('+Math.sqrt(myRange.value).toFixed(1)+'x)';
         document.getElementById('sliderValue').innerHTML = value;
     });
 }
@@ -157,16 +157,15 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
     const canvases = Array.from(document.getElementsByClassName('uploadCanvas'));
     canvases.forEach(canvas => {
         canvas.remove();
-    })
+    });
+
     if(magnification === '0') {
         const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: 4096})).blob();
         const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'.jpeg';
         canvasHandler(blob, fileName, 512, 4096, thumbnailDiv, false);
+        handleImageUpload(thumbnailDiv);
     }
     else {
-        // const imageRatio = Math.min(imageInfo.width, imageInfo.height) / Math.max(imageInfo.width, imageInfo.height);
-        // const rows = imageRatio > 0.5 ? 2 : 1; 
-        // const cols = 4;
         const rows = magnificationLevel[magnification].rows;
         const cols = magnificationLevel[magnification].cols;
         const imageDiv = document.createElement('div');
@@ -192,8 +191,8 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
             const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpeg';
             canvasHandler(tileBlob, fileName, tileParams.tileSize, 512, imageDiv, true);
         }
+        handleImageUpload(imageDiv);
     }
-    handleImageUpload();
 }
 
 const canvasHandler = (blob, fileName, desiredResolution, hiddenTileResolution, thumbnailDiv, smallerImage) => {
@@ -206,6 +205,7 @@ const canvasHandler = (blob, fileName, desiredResolution, hiddenTileResolution, 
     img.onload = () => {
         maxResolution = Math.max(img.width, img.height);
         const canvas = document.createElement('canvas');
+        desiredResolution = hiddenTileResolution;
         let ratio = maxResolution / desiredResolution;
         canvas.width = desiredResolution;
         canvas.height = desiredResolution;
@@ -215,28 +215,16 @@ const canvasHandler = (blob, fileName, desiredResolution, hiddenTileResolution, 
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, desiredResolution, desiredResolution);
         ctx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
+        canvas.dataset.fileName = fileName;
+        canvas.classList = 'uploadCanvas';
+        document.body.appendChild(canvas);
         
         const dataURL = canvas.toDataURL(blob.type);
         const img2 = document.createElement('img');
         if(smallerImage) img2.className = "tile-thumbnail"
+        else img2.className = 'whole-image';
         img2.src = dataURL;
         thumbnailDiv.appendChild(img2);
-        
-        desiredResolution = hiddenTileResolution;
-        ratio = maxResolution / desiredResolution;
-        x = img.width === maxResolution ? 0 : (desiredResolution - img.width/ratio) * 0.5;
-        y = img.height === maxResolution ? 0 : (desiredResolution - img.height/ratio) * 0.5;
-        
-        const hiddenCanvas = document.createElement('canvas');
-        hiddenCanvas.width = desiredResolution;
-        hiddenCanvas.height = desiredResolution;
-        const hiddenCtx = hiddenCanvas.getContext('2d');
-        hiddenCtx.fillStyle = 'white';
-        hiddenCtx.fillRect(0, 0, desiredResolution, desiredResolution);
-        hiddenCtx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
-        hiddenCanvas.dataset.fileName = fileName;
-        hiddenCanvas.classList = 'uploadCanvas';
-        document.body.appendChild(hiddenCanvas);
     }
 }
 
@@ -256,7 +244,7 @@ const generateXYs = (rows, cols, height, width) => {
     return xys
 }
 
-const handleImageUpload = async () => {
+const handleImageUpload = async (thumbnailDiv) => {
     const button = document.getElementById('uploadImage');
     button.addEventListener('click', () => {
         const canvases = Array.from(document.getElementsByClassName('uploadCanvas'));
@@ -280,7 +268,7 @@ const handleImageUpload = async () => {
                 }
                 const p = document.createElement('p');
                 p.innerHTML = `<span class="success">${message}</span>`;
-                document.getElementById('thumbnailDiv').appendChild(p);
+                thumbnailDiv.appendChild(p);
             }, 'image/jpeg', 1);
         }
         
