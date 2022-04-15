@@ -10,7 +10,7 @@ const initialize = () => {
 const displaySliderValue = () => {
     const myRange = document.getElementById("myRange");
     myRange.addEventListener('input', () => {
-        const value = myRange.value === '0' ? '1 image' : myRange.value+' tiles';
+        const value = myRange.value === '0' ? '1 image (1x)' : myRange.value+' tiles ('+Math.sqrt(myRange.value).toFixed(1)+' x)';
         document.getElementById('sliderValue').innerHTML = value;
     });
 }
@@ -31,7 +31,24 @@ const magnificationLevel = {
     32: {
         rows: 4,
         cols: 8
-    }
+    },
+    40: {
+        rows: 5,
+        cols: 8
+    },
+    48: {
+        rows: 6,
+        cols: 8
+    },
+    56: {
+        rows: 7,
+        cols: 8
+    },
+    64: {
+        rows: 8,
+        cols: 8
+    },
+
 }
 
 const getFolderIds = () => {
