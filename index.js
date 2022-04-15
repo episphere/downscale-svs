@@ -217,14 +217,16 @@ const canvasHandler = (blob, fileName, desiredResolution, hiddenTileResolution, 
         ctx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
         canvas.dataset.fileName = fileName;
         canvas.classList = 'uploadCanvas';
-        document.body.appendChild(canvas);
+        if(smallerImage) canvas.classList.add("tile-thumbnail")
+        else canvas.classList.add('whole-image');
+        thumbnailDiv.appendChild(canvas);
         
-        const dataURL = canvas.toDataURL(blob.type);
-        const img2 = document.createElement('img');
-        if(smallerImage) img2.className = "tile-thumbnail"
-        else img2.className = 'whole-image';
-        img2.src = dataURL;
-        thumbnailDiv.appendChild(img2);
+        // const dataURL = canvas.toDataURL(blob.type);
+        // const img2 = document.createElement('img');
+        // if(smallerImage) img2.className = "tile-thumbnail"
+        // else img2.className = 'whole-image';
+        // img2.src = dataURL;
+        // thumbnailDiv.appendChild(img2);
     }
 }
 
