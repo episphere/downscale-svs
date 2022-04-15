@@ -3,8 +3,8 @@
 }
 
 .tile-thumbnail {
-    height: 80px;
-    width: 80px;
+    height: 130px;
+    width: 130px;
     object-fit: contain;
     border: 0.5px solid #b0b0b0
 }

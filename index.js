@@ -161,11 +161,10 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
     if(magnification === '0') {
         const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: 4096})).blob();
         const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'.jpeg';
-        canvasHandler(blob, fileName, 512, 4096, thumbnailDiv);
+        canvasHandler(blob, fileName, 512, 4096, thumbnailDiv, false);
     }
     else {
-        const imageRatio = Math.min(imageInfo.width, imageInfo.height) / Math.max(imageInfo.width, imageInfo.height);
-        
+        // const imageRatio = Math.min(imageInfo.width, imageInfo.height) / Math.max(imageInfo.width, imageInfo.height);
         // const rows = imageRatio > 0.5 ? 2 : 1; 
         // const cols = 4;
         const rows = magnificationLevel[magnification].rows;
@@ -173,8 +172,8 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
         const imageDiv = document.createElement('div');
         imageDiv.classList = 'row';
         imageDiv.id = 'imageDiv';
-        imageDiv.style.width = `${82*cols}px`;
-        imageDiv.style.height = `${82*rows}px`;
+        imageDiv.style.width = `${132*cols}px`;
+        imageDiv.style.height = `${132*rows}px`;
         document.body.appendChild(imageDiv);
         const xys = generateXYs(rows, cols, imageInfo.height, imageInfo.width);
         let heightIncrements = Math.floor(imageInfo.height / rows);
@@ -191,13 +190,13 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
             };
             const tileBlob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
             const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpeg';
-            canvasHandler(tileBlob, fileName, tileParams.tileSize, 512, imageDiv);
+            canvasHandler(tileBlob, fileName, tileParams.tileSize, 512, imageDiv, true);
         }
     }
     handleImageUpload();
 }
 
-const canvasHandler = (blob, fileName, desiredResolution, hiddenTileResolution, thumbnailDiv) => {
+const canvasHandler = (blob, fileName, desiredResolution, hiddenTileResolution, thumbnailDiv, smallerImage) => {
     let maxResolution = 4096;
     const response = URL.createObjectURL(blob);
     
@@ -219,7 +218,7 @@ const canvasHandler = (blob, fileName, desiredResolution, hiddenTileResolution, 
         
         const dataURL = canvas.toDataURL(blob.type);
         const img2 = document.createElement('img');
-        img2.className = "tile-thumbnail"
+        if(smallerImage) img2.className = "tile-thumbnail"
         img2.src = dataURL;
         thumbnailDiv.appendChild(img2);
         
