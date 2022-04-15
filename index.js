@@ -10,7 +10,7 @@ const initialize = () => {
 const displaySliderValue = () => {
     const myRange = document.getElementById("myRange");
     myRange.addEventListener('input', () => {
-        const value = myRange.value === '0' ? '1 image (1x)' : myRange.value+' tiles ('+Math.sqrt(myRange.value).toFixed(1)+' x)';
+        const value = myRange.value === '0' ? '1 image (1x)' : myRange.value+' tiles ('+Math.sqrt(myRange.value).toFixed(1)+'x)';
         document.getElementById('sliderValue').innerHTML = value;
     });
 }
