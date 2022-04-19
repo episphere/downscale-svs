@@ -302,8 +302,8 @@ const canvasHandler = (blob, fileName, desiredResolution, thumbnailDiv, smallerI
             const avgBlue = Math.floor(rgb.b / count);
     
             canvas.dataset.fileName = fileName;
-            canvas.classList = 'uploadCanvas';
-            const threshbold = 225;
+            canvas.classList.add('uploadCanvas');
+            const threshbold = 240;
             if(avgBlue < threshbold && avgGreen < threshbold && avgRed < threshbold) {
                 canvas.classList.add('tile-thumbnail-selected');
             }
