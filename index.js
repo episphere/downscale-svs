@@ -21,7 +21,7 @@ const radioHandler = () => {
                         Tiles to extract: <input type="number" id="noOfTiles" min="4" max="20" value="4">
                     </div>
                     <div class="new-line mr-top-10">
-                        Maginification level: <input type="number" id="magnificationLevel" min="3" max="20" value="10"> x
+                        Maginification level: <input type="number" id="magnificationLevel" min="3" max="60" value="10"> x
                     </div>
                     
                 `;
