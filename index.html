@@ -20,11 +20,17 @@
             <input type="text" required pattern="^[0-9]{12}$" id="inputFolderId" value="156562380907" placeholder="BOX input folder Id">
             <input type="text" required pattern="^[0-9]{12}$" id="outputFolderId" value="160906438490" placeholder="BOX output folder Id">
             
-            <div class="slidecontainer mr-top-10 mr-bottom-10">
+            <div class="mr-top-10">
+                <input type="radio" checked name="extractTiles" value="allTiles" id="extractAllTiles">
+                <label for="extractAllTiles">Extract all tile</label>
+                <input type="radio" name="extractTiles" value="randomTiles" id="randomlySelectTiles">
+                <label for="randomlySelectTiles">Randomly select tiles</label>
+            </div>
+            <div class="slidecontainer mr-top-10 mr-bottom-10" id="tileRangeSelector">
                 <input type="range" min="0" max="96" value="8" step="8" class="slider" id="myRange">
                 <span id="sliderValue">8 tiles (2.8x)</span>
             </div>
-            <button type="submit">Submit</button>
+            <button type="submit">Extract tile(s)</button>
         </form>
         <div class="new-line" style="margin-top: 1rem;" id="fileSelectionDiv"></div>
     </div>

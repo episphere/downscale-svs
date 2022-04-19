@@ -3,12 +3,45 @@ import imagebox3 from "https://episphere.github.io/imagebox3/imagebox3.mjs"
 const initialize = () => {
     epibox.ini();
     if(!localStorage.epiBoxToken) return;
-    getFolderIds();
+    radioHandler();
     displaySliderValue();
+    getFolderIds();
+}
+
+const radioHandler = () => {
+    const radioButtons = Array.from(document.getElementsByName('extractTiles'));
+    radioButtons.forEach(radioButton => {
+        radioButton.addEventListener('change', () => {
+            const value = radioButton.value;
+            const tileRangeSelector = document.getElementById('tileRangeSelector');
+            if(value === 'randomTiles') {
+                tileRangeSelector.innerHTML = `
+                    
+                    <div class="new-line">
+                        Tiles to extract: <input type="number" id="noOfTiles" min="4" max="20" value="4">
+                    </div>
+                    <div class="new-line mr-top-10">
+                        Maginification level: <input type="number" id="magnificationLevel" min="3" max="20" value="10"> x
+                    </div>
+                    
+                `;
+                tileRangeSelector.classList.remove('slidecontainer')
+            }
+            else {
+                tileRangeSelector.classList.add('slidecontainer')
+                tileRangeSelector.innerHTML = `
+                                    <input type="range" min="0" max="96" value="8" step="8" class="slider" id="myRange">
+                                    <span id="sliderValue">8 tiles (2.8x)</span>`;
+                displaySliderValue();
+            }
+        });
+    });
+
 }
 
 const displaySliderValue = () => {
     const myRange = document.getElementById("myRange");
+    if(!myRange) return;
     myRange.addEventListener('input', () => {
         const value = myRange.value === '0' ? 'whole image (1x)' : myRange.value+' tiles ('+Math.sqrt(myRange.value).toFixed(1)+'x)';
         document.getElementById('sliderValue').innerHTML = value;
@@ -157,7 +190,8 @@ const getFolderItems = async (accessToken, folderId) => {
 }
 
 const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
-    const magnification = document.getElementById("myRange").value;
+    let magnification = null;
+    if(document.getElementById("myRange")) magnification = document.getElementById("myRange").value;
     if(document.getElementById('loaderDiv')) document.getElementById('loaderDiv').remove();
 
     const thumbnailDiv = document.createElement('div');
@@ -175,10 +209,28 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
         canvas.remove();
     });
 
-    if(magnification === '0') {
-        const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: 4096})).blob();
+    if(!magnification) {
+        const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: 512})).blob();
+        const pixelsWithTissue = await getWholeSlidePixelData(blob, 512, imageURL);
+        const tiles = document.getElementById('noOfTiles').value;
+        const magnificationLevel = document.getElementById('magnificationLevel').value;
+        const imageDiv = document.createElement('div');
+        imageDiv.classList = 'row';
+        imageDiv.id = 'imageDiv';
+        document.body.appendChild(imageDiv);
+        for(let i = 0; i < tiles; i++) {
+            const random = Math.floor(Math.random() * pixelsWithTissue.length);
+            const xy = pixelsWithTissue[random];
+            const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpeg';
+            await extractRandomTile(xy, imageInfo.width/magnificationLevel, imageInfo.height/magnificationLevel, imageURL, imageDiv, fileName);
+        }
+        canvasEvents();
+        handleImageUpload(imageDiv);
+    }
+    else if(magnification === '0') {
+        const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: 512})).blob();
         const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'.jpeg';
-        canvasHandler(blob, fileName, 512, 4096, thumbnailDiv, false);
+        canvasHandler(blob, fileName, 512, thumbnailDiv, false);
         handleImageUpload(thumbnailDiv);
     }
     else {
@@ -205,42 +257,144 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
             };
             const tileBlob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
             const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpeg';
-            canvasHandler(tileBlob, fileName, tileParams.tileSize, 512, imageDiv, true);
+            await canvasHandler(tileBlob, fileName, tileParams.tileSize, imageDiv, true);
         }
-        setTimeout(() => {
-            // because last canvas rendering takes some time
-            canvasEvents();
-        },2000);
+        canvasEvents();
         handleImageUpload(imageDiv);
     }
 }
 
-const canvasHandler = (blob, fileName, desiredResolution, hiddenTileResolution, thumbnailDiv, smallerImage) => {
-    let maxResolution = 4096;
-    const response = URL.createObjectURL(blob);
+const canvasHandler = (blob, fileName, desiredResolution, thumbnailDiv, smallerImage, imageURL) => {
+    return new Promise((resolve, reject) => {
+        let maxResolution = 512;
+        const response = URL.createObjectURL(blob);
+        
+        const img = new Image();
+        img.src = response;
     
-    const img = new Image();
-    img.src = response;
+        img.onload = () => {
+            maxResolution = Math.max(img.width, img.height);
+            const canvas = document.createElement('canvas');
+            let ratio = maxResolution / desiredResolution;
+            canvas.width = desiredResolution;
+            canvas.height = desiredResolution;
+            const ctx = canvas.getContext('2d');
+            let x = img.width === maxResolution ? 0 : Math.floor(Math.abs(desiredResolution - img.width / ratio) * 0.5);
+            let y = img.height === maxResolution ? 0 : Math.floor(Math.abs(desiredResolution - img.height / ratio) * 0.5);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, desiredResolution, desiredResolution);
+            ctx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
 
-    img.onload = () => {
-        maxResolution = Math.max(img.width, img.height);
-        const canvas = document.createElement('canvas');
-        desiredResolution = hiddenTileResolution;
-        let ratio = maxResolution / desiredResolution;
-        canvas.width = desiredResolution;
-        canvas.height = desiredResolution;
-        const ctx = canvas.getContext('2d');
-        let x = img.width === maxResolution ? 0 : Math.floor(Math.abs(desiredResolution - img.width / ratio) * 0.5);
-        let y = img.height === maxResolution ? 0 : Math.floor(Math.abs(desiredResolution - img.height / ratio) * 0.5);
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, desiredResolution, desiredResolution);
-        ctx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
-        canvas.dataset.fileName = fileName;
-        canvas.classList = 'uploadCanvas';
-        if(smallerImage) canvas.classList.add("tile-thumbnail")
-        else canvas.classList.add('whole-image');
-        thumbnailDiv.appendChild(canvas);
-    }
+            const imageData = ctx.getImageData(0, 0, desiredResolution, desiredResolution).data;
+    
+            const blockSize = 5;
+            const  rgb = {r:0,g:0,b:0}
+            let count = 0;
+            let i = -4;
+            while ((i += blockSize * 4) < imageData.length ) {
+                ++count;
+                rgb.r += imageData[i];
+                rgb.g += imageData[i+1];
+                rgb.b += imageData[i+2];
+            }
+            const avgRed = Math.floor(rgb.r / count);
+            const avgGreen = Math.floor(rgb.g / count);
+            const avgBlue = Math.floor(rgb.b / count);
+    
+            canvas.dataset.fileName = fileName;
+            canvas.classList = 'uploadCanvas';
+            const threshbold = 225;
+            if(avgBlue < threshbold && avgGreen < threshbold && avgRed < threshbold) {
+                canvas.classList.add('tile-thumbnail-selected');
+            }
+    
+            if(smallerImage) canvas.classList.add("tile-thumbnail")
+            else canvas.classList.add('whole-image');
+            thumbnailDiv.appendChild(canvas);
+            resolve(true);
+        }
+    })
+    
+}
+
+const getWholeSlidePixelData = (blob, desiredResolution) => {
+    return new Promise((resolve, reject) => {
+        let maxResolution = 512;
+        const response = URL.createObjectURL(blob);
+        
+        const img = new Image();
+        img.src = response;
+    
+        img.onload = () => {
+            maxResolution = Math.max(img.width, img.height);
+            const canvas = document.createElement('canvas');
+            let ratio = maxResolution / desiredResolution;
+            canvas.width = desiredResolution;
+            canvas.height = desiredResolution;
+            const ctx = canvas.getContext('2d');
+            let x = img.width === maxResolution ? 0 : Math.floor(Math.abs(desiredResolution - img.width / ratio) * 0.5);
+            let y = img.height === maxResolution ? 0 : Math.floor(Math.abs(desiredResolution - img.height / ratio) * 0.5);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, desiredResolution, desiredResolution);
+            ctx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
+            const imageData = ctx.getImageData(0, 0, desiredResolution, desiredResolution).data;
+            const imageDataArray = [];
+            let pixelCounter = 0;
+            for(let i = 0; i < imageData.length; i += 4) {
+                const threshbold = 220;
+                if(imageData[i] < threshbold || imageData[i+1] < threshbold || imageData[i+2] < threshbold || imageData[i+3] < threshbold) {
+                    const x = Math.floor((pixelCounter / 4) % canvas.width);
+                    const y = Math.floor((pixelCounter / 4) / canvas.width);
+                    const pixelArray = [x, y];
+                    imageDataArray.push(pixelArray);
+                }
+                pixelCounter++;
+            }
+            resolve(imageDataArray);
+        }
+    })
+    
+}
+
+const extractRandomTile = async ([x, y], widthIncrements, heightIncrements, imageURL, imageDiv, fileName) => {
+    return new Promise(async (resolve, reject) => {
+        let tileParams = {
+            tileSize: 1024,
+            tileX: x*248,
+            tileY: y*130,
+            tileWidth: widthIncrements,
+            tileHeight: heightIncrements
+        };
+        const blob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
+    
+        let maxResolution = 1024;
+        const response = URL.createObjectURL(blob);
+        
+        const img = new Image();
+        img.src = response;
+    
+        img.onload = () => {
+            let desiredResolution = 1024;
+            maxResolution = Math.max(img.width, img.height);
+            const canvas = document.createElement('canvas');
+            let ratio = maxResolution / desiredResolution;
+            canvas.width = desiredResolution;
+            canvas.height = desiredResolution;
+            const ctx = canvas.getContext('2d');
+            let x = img.width === maxResolution ? 0 : Math.floor(Math.abs(desiredResolution - img.width / ratio) * 0.5);
+            let y = img.height === maxResolution ? 0 : Math.floor(Math.abs(desiredResolution - img.height / ratio) * 0.5);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, desiredResolution, desiredResolution);
+            ctx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
+           
+            canvas.dataset.fileName = fileName;
+            canvas.classList.add('uploadCanvas');
+            canvas.classList.add('tile-thumbnail-selected');
+            canvas.classList.add("tile-thumbnail");
+            imageDiv.appendChild(canvas);
+            resolve(true)
+        }
+    })
 }
 
 const canvasEvents = () => {

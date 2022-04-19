@@ -6,13 +6,13 @@
     height: 130px;
     width: 130px;
     object-fit: contain;
-    border: 2px dashed #cfcece
+    border: 2px dotted #cfcece
 }
 
 .whole-image {
     width: 512px;
     height: 512px;
-    border: 2px dashed #cfcece
+    border: 2px dotted #cfcece
 }
 
 .mr-top-10 {
