@@ -210,8 +210,10 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
     });
 
     if(!magnification) {
-        const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: 512})).blob();
-        const pixelsWithTissue = await getWholeSlidePixelData(blob, 512, imageURL);
+        const dimension = 512;
+        const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: dimension})).blob();
+        const allPixels = await getWholeSlidePixelData(blob, dimension, imageURL);
+        
         const tiles = document.getElementById('noOfTiles').value;
         const magnificationLevel = document.getElementById('magnificationLevel').value;
         const imageDiv = document.createElement('div');
@@ -219,8 +221,7 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
         imageDiv.id = 'imageDiv';
         document.body.appendChild(imageDiv);
         for(let i = 0; i < tiles; i++) {
-            const random = Math.floor(Math.random() * pixelsWithTissue.length);
-            const xy = pixelsWithTissue[random];
+            const xy = getRandomPixels(allPixels, dimension);
             const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpeg';
             await extractRandomTile(xy, imageInfo.width/magnificationLevel, imageInfo.height/magnificationLevel, imageURL, imageDiv, fileName);
         }
@@ -262,6 +263,54 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
         canvasEvents();
         handleImageUpload(imageDiv);
     }
+}
+
+const getRandomPixels = (array, dimension) => {
+    array = Array.from(array);
+    const width = dimension;
+    const height = dimension;
+    const allPixels = [];
+    const pixelsWithTissue = [];
+    let pixelCounter = 0;
+    let threshbold = 240;
+    const neightbours = 50;
+
+    for(let i = 0; i < array.length; i += 4) {
+        const red = array[i];
+        const green = array[i+1];
+        const blue = array[i+2];
+        const pixelArray = [red, green, blue, pixelCounter];
+        allPixels.push(pixelArray);
+        if(red < threshbold && green < threshbold && blue < threshbold) pixelsWithTissue.push(pixelArray);
+        pixelCounter++;
+    }
+    let isGoodPixel = false;
+    let random, pixel, x, y;
+
+    while(!isGoodPixel) {
+        random = Math.ceil(Math.random() * pixelsWithTissue.length);
+        pixel = pixelsWithTissue[random];
+        x = pixel[3] % width;
+        y = Math.floor(pixel[3] / height);
+        const newX = x + neightbours;
+        const newY = y + neightbours;
+        const neighbours = [];
+        if(newX > width || newY > height) continue;
+        for(let m = x; m < newX; m++) {
+            for(let n = y; n < newY; n++) {
+                const newPixelIndex = m + n * width;
+                neighbours.push(allPixels[newPixelIndex]);
+            }
+        }
+        const avgRed = Math.floor(neighbours.reduce((acc, curr) => acc + curr[0], 0) / neighbours.length);
+        const avgGreen = Math.floor(neighbours.reduce((acc, curr) => acc + curr[1], 0) / neighbours.length);
+        const avgBlue = Math.floor(neighbours.reduce((acc, curr) => acc + curr[2], 0) / neighbours.length);
+        console.log(pixelsWithTissue.length, avgRed, avgGreen, avgBlue);
+        if(avgRed < threshbold && avgGreen < threshbold && avgBlue < threshbold) isGoodPixel = true;
+        else isGoodPixel = false;
+    }
+    
+    return [x, y];
 }
 
 const canvasHandler = (blob, fileName, desiredResolution, thumbnailDiv, smallerImage, imageURL) => {
@@ -338,19 +387,7 @@ const getWholeSlidePixelData = (blob, desiredResolution) => {
             ctx.fillRect(0, 0, desiredResolution, desiredResolution);
             ctx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
             const imageData = ctx.getImageData(0, 0, desiredResolution, desiredResolution).data;
-            const imageDataArray = [];
-            let pixelCounter = 0;
-            for(let i = 0; i < imageData.length; i += 4) {
-                const threshbold = 220;
-                if(imageData[i] < threshbold || imageData[i+1] < threshbold || imageData[i+2] < threshbold || imageData[i+3] < threshbold) {
-                    const x = Math.floor((pixelCounter / 4) % canvas.width);
-                    const y = Math.floor((pixelCounter / 4) / canvas.width);
-                    const pixelArray = [x, y];
-                    imageDataArray.push(pixelArray);
-                }
-                pixelCounter++;
-            }
-            resolve(imageDataArray);
+            resolve(imageData);
         }
     })
     
@@ -362,8 +399,8 @@ const extractRandomTile = async ([x, y], widthIncrements, heightIncrements, imag
             tileSize: 1024,
             tileX: x*248,
             tileY: y*130,
-            tileWidth: widthIncrements,
-            tileHeight: heightIncrements
+            tileWidth: Math.max(widthIncrements, heightIncrements),
+            tileHeight: Math.max(widthIncrements, heightIncrements)
         };
         const blob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
     
