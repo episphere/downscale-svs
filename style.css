@@ -86,7 +86,7 @@
     white-space: nowrap;
 }
 
-canvas:hover {
+.uploadCanvas:hover {
     cursor: pointer;
     border: 2px solid red;
 }

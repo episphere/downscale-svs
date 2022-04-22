@@ -1,4 +1,6 @@
-import imagebox3 from "https://episphere.github.io/imagebox3/imagebox3.mjs"
+import imagebox3 from "https://episphere.github.io/imagebox3/imagebox3.mjs";
+const lowerThreshold = 150;
+const upperThreshold = 240;
 
 const initialize = () => {
     epibox.ini();
@@ -21,7 +23,7 @@ const radioHandler = () => {
                         Tiles to extract: <input type="number" id="noOfTiles" min="4" max="20" value="4">
                     </div>
                     <div class="new-line mr-top-10">
-                        Maginification level: <input type="number" id="magnificationLevel" min="3" max="60" value="10"> x
+                        Maginification level: <input type="number" id="magnificationLevel" min="3" max="60" value="5"> x
                     </div>
                     
                 `;
@@ -31,7 +33,7 @@ const radioHandler = () => {
                 tileRangeSelector.classList.add('slidecontainer')
                 tileRangeSelector.innerHTML = `
                                     <input type="range" min="0" max="96" value="8" step="8" class="slider" id="myRange">
-                                    <span id="sliderValue">8 tiles (2.8x)</span>`;
+                                    <span id="sliderValue">8 tiles</span>`;
                 displaySliderValue();
             }
         });
@@ -43,7 +45,7 @@ const displaySliderValue = () => {
     const myRange = document.getElementById("myRange");
     if(!myRange) return;
     myRange.addEventListener('input', () => {
-        const value = myRange.value === '0' ? 'whole image (1x)' : myRange.value+' tiles ('+Math.sqrt(myRange.value).toFixed(1)+'x)';
+        const value = myRange.value === '0' ? 'whole image' : myRange.value+' tiles';
         document.getElementById('sliderValue').innerHTML = value;
     });
 }
@@ -97,7 +99,6 @@ const magnificationLevel = {
         rows: 8,
         cols: 12
     }
-
 }
 
 const getFolderIds = () => {
@@ -211,19 +212,24 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
 
     if(!magnification) {
         const dimension = 512;
-        const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: dimension})).blob();
-        const allPixels = await getWholeSlidePixelData(blob, dimension, imageURL);
-        
-        const tiles = document.getElementById('noOfTiles').value;
         const magnificationLevel = document.getElementById('magnificationLevel').value;
         const imageDiv = document.createElement('div');
         imageDiv.classList = 'row';
         imageDiv.id = 'imageDiv';
+        const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: dimension})).blob();
+        const desiredCoordinates = await getWholeSlidePixelData(blob, dimension, imageDiv);
         document.body.appendChild(imageDiv);
-        for(let i = 0; i < tiles; i++) {
-            const xy = getRandomPixels(allPixels, dimension);
+        for(let i = 0; i < desiredCoordinates.length; i++) {
+            let x = desiredCoordinates[i][0];
+            let y = desiredCoordinates[i][1];
+            x = x * Math.floor(imageInfo.width/dimension);
+            y = y * Math.floor(imageInfo.height/dimension);
+            const scaledWidth = Math.floor(imageInfo.width/magnificationLevel);
+            const scaledHeight = Math.floor(imageInfo.height/magnificationLevel);
+            x = x - ~~(scaledWidth/2);
+            y = y - ~~(scaledHeight/2);
             const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpeg';
-            await extractRandomTile(xy, imageInfo.width/magnificationLevel, imageInfo.height/magnificationLevel, imageURL, imageDiv, fileName);
+            await extractRandomTile([x, y], scaledWidth, scaledHeight, imageURL, imageDiv, fileName);
         }
         canvasEvents();
         handleImageUpload(imageDiv);
@@ -265,52 +271,30 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
     }
 }
 
-const getRandomPixels = (array, dimension) => {
+const getPixelsWithTissue = (array) => {
     array = Array.from(array);
-    const width = dimension;
-    const height = dimension;
     const allPixels = [];
     const pixelsWithTissue = [];
     let pixelCounter = 0;
-    let threshbold = 240;
-    const neightbours = 50;
-
     for(let i = 0; i < array.length; i += 4) {
         const red = array[i];
         const green = array[i+1];
         const blue = array[i+2];
         const pixelArray = [red, green, blue, pixelCounter];
         allPixels.push(pixelArray);
-        if(red < threshbold && green < threshbold && blue < threshbold) pixelsWithTissue.push(pixelArray);
+        if(red < 230 && green < 230 && blue < 230) pixelsWithTissue.push(pixelArray);
         pixelCounter++;
     }
-    let isGoodPixel = false;
-    let random, pixel, x, y;
+    return pixelsWithTissue;
+}
 
-    while(!isGoodPixel) {
-        random = Math.ceil(Math.random() * pixelsWithTissue.length);
-        pixel = pixelsWithTissue[random];
-        x = pixel[3] % width;
-        y = Math.floor(pixel[3] / height);
-        const newX = x + neightbours;
-        const newY = y + neightbours;
-        const neighbours = [];
-        if(newX > width || newY > height) continue;
-        for(let m = x; m < newX; m++) {
-            for(let n = y; n < newY; n++) {
-                const newPixelIndex = m + n * width;
-                neighbours.push(allPixels[newPixelIndex]);
-            }
-        }
-        const avgRed = Math.floor(neighbours.reduce((acc, curr) => acc + curr[0], 0) / neighbours.length);
-        const avgGreen = Math.floor(neighbours.reduce((acc, curr) => acc + curr[1], 0) / neighbours.length);
-        const avgBlue = Math.floor(neighbours.reduce((acc, curr) => acc + curr[2], 0) / neighbours.length);
-        console.log(pixelsWithTissue.length, avgRed, avgGreen, avgBlue);
-        if(avgRed < threshbold && avgGreen < threshbold && avgBlue < threshbold) isGoodPixel = true;
-        else isGoodPixel = false;
-    }
-    
-    return [x, y];
+const getRandomPixels = (pixelsWithTissue, dimension) => {
+    const random = Math.floor(Math.random() * pixelsWithTissue.length);
+    const randomPixel = pixelsWithTissue[random];
+    const desiredX = randomPixel[3] % dimension;
+    const desiredY = Math.floor(randomPixel[3] / dimension);
+
+    return [desiredX, desiredY];
 }
 
 const canvasHandler = (blob, fileName, desiredResolution, thumbnailDiv, smallerImage, imageURL) => {
@@ -352,8 +336,8 @@ const canvasHandler = (blob, fileName, desiredResolution, thumbnailDiv, smallerI
     
             canvas.dataset.fileName = fileName;
             canvas.classList.add('uploadCanvas');
-            const threshbold = 240;
-            if(avgBlue < threshbold && avgGreen < threshbold && avgRed < threshbold) {
+            // const threshold = 240;
+            if(avgBlue < upperThreshold && avgGreen < upperThreshold && avgRed < upperThreshold) {
                 canvas.classList.add('tile-thumbnail-selected');
             }
     
@@ -366,7 +350,7 @@ const canvasHandler = (blob, fileName, desiredResolution, thumbnailDiv, smallerI
     
 }
 
-const getWholeSlidePixelData = (blob, desiredResolution) => {
+const getWholeSlidePixelData = (blob, desiredResolution, imageDiv) => {
     return new Promise((resolve, reject) => {
         let maxResolution = 512;
         const response = URL.createObjectURL(blob);
@@ -386,8 +370,32 @@ const getWholeSlidePixelData = (blob, desiredResolution) => {
             ctx.fillStyle = 'white';
             ctx.fillRect(0, 0, desiredResolution, desiredResolution);
             ctx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
+            canvas.classList.add('whole-image');
+            imageDiv.appendChild(canvas);
+            const br = document.createElement('br');
+            imageDiv.appendChild(br);
             const imageData = ctx.getImageData(0, 0, desiredResolution, desiredResolution).data;
-            resolve(imageData);
+            const tiles = document.getElementById('noOfTiles').value;
+            const desiredCoordinates = [];
+            const pixelsWithTissue = getPixelsWithTissue(imageData);
+
+            for(let i = 0; i < pixelsWithTissue.length; i++) {
+                const [pixelX, pixelY] = getRandomPixels(pixelsWithTissue, desiredResolution);
+                ctx.beginPath();
+                ctx.arc(pixelX, pixelY, 1, 0, 1 * Math.PI);
+                ctx.strokeStyle = 'rgba(109, 222, 117, 0.3)';
+                ctx.stroke();
+
+            }
+
+            for(let i = 0; i < tiles; i++) {
+                let [tileX, tileY] = getRandomPixels(pixelsWithTissue, desiredResolution);
+                ctx.rect(tileX - 25, tileY - 25, 50, 50);
+                ctx.strokeStyle = 'red';
+                ctx.stroke();
+                desiredCoordinates.push([tileX, tileY]);
+            }
+            resolve(desiredCoordinates);
         }
     })
     
@@ -397,8 +405,8 @@ const extractRandomTile = async ([x, y], widthIncrements, heightIncrements, imag
     return new Promise(async (resolve, reject) => {
         let tileParams = {
             tileSize: 1024,
-            tileX: x*248,
-            tileY: y*130,
+            tileX: x,
+            tileY: y,
             tileWidth: Math.max(widthIncrements, heightIncrements),
             tileHeight: Math.max(widthIncrements, heightIncrements)
         };
@@ -423,10 +431,27 @@ const extractRandomTile = async ([x, y], widthIncrements, heightIncrements, imag
             ctx.fillStyle = 'white';
             ctx.fillRect(0, 0, desiredResolution, desiredResolution);
             ctx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
-           
+
+            const imageData = ctx.getImageData(0, 0, desiredResolution, desiredResolution).data;
+            
+            const blockSize = 5;
+            const  rgb = {r:0,g:0,b:0}
+            let count = 0;
+            let i = -4;
+            while ((i += blockSize * 4) < imageData.length ) {
+                ++count;
+                rgb.r += imageData[i];
+                rgb.g += imageData[i+1];
+                rgb.b += imageData[i+2];
+            }
+            const avgRed = Math.floor(rgb.r / count);
+            const avgGreen = Math.floor(rgb.g / count);
+            const avgBlue = Math.floor(rgb.b / count);
+            if(avgBlue < upperThreshold && avgGreen < upperThreshold && avgRed < upperThreshold && avgBlue > lowerThreshold && avgGreen > lowerThreshold && avgRed > lowerThreshold) {
+                canvas.classList.add('tile-thumbnail-selected');
+            }
             canvas.dataset.fileName = fileName;
             canvas.classList.add('uploadCanvas');
-            canvas.classList.add('tile-thumbnail-selected');
             canvas.classList.add("tile-thumbnail");
             imageDiv.appendChild(canvas);
             resolve(true)
