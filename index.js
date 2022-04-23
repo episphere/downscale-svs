@@ -392,11 +392,12 @@ const getWholeSlidePixelData = (blob, desiredResolution, imageDiv, imageInfo) =>
             
             const magnification = document.getElementById('magnificationLevel').value;
             const rectSize = Math.min(Math.floor(img.width / magnification), Math.floor(img.height / magnification));
+            const maxRectSize = Math.max(Math.floor(img.width / magnification), Math.floor(img.height / magnification));
             const buffer = Math.floor(rectSize / 2);
-            let lowerX = rectSize;
-            let lowerY = rectSize;
-            let upperX = img.width - buffer;
-            let upperY = img.height - buffer;
+            let lowerX = maxRectSize;
+            let lowerY = maxRectSize;
+            let upperX = img.width - maxRectSize;
+            let upperY = img.height - maxRectSize;
             
             for(let i = 0; i < tiles; i++) {
                 let isValid = false;
