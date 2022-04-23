@@ -1,6 +1,6 @@
 import imagebox3 from "https://episphere.github.io/imagebox3/imagebox3.mjs";
 const lowerThreshold = 150;
-const upperThreshold = 240;
+const upperThreshold = 230;
 
 const initialize = () => {
     epibox.ini();
@@ -23,7 +23,7 @@ const radioHandler = () => {
                         Tiles to extract: <input type="number" id="noOfTiles" min="4" max="20" value="4">
                     </div>
                     <div class="new-line mr-top-10">
-                        Maginification level: <input type="number" id="magnificationLevel" min="3" max="60" value="5"> x
+                        Maginification level: <input type="number" id="magnificationLevel" min="3" max="60" value="8"> x
                     </div>
                     
                 `;
@@ -217,17 +217,17 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
         imageDiv.classList = 'row';
         imageDiv.id = 'imageDiv';
         const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: dimension})).blob();
-        const desiredCoordinates = await getWholeSlidePixelData(blob, dimension, imageDiv);
+        const [desiredCoordinates, imgWidth, imgHeight] = await getWholeSlidePixelData(blob, dimension, imageDiv);
         document.body.appendChild(imageDiv);
         for(let i = 0; i < desiredCoordinates.length; i++) {
             let x = desiredCoordinates[i][0];
             let y = desiredCoordinates[i][1];
-            x = x * Math.floor(imageInfo.width/dimension);
-            y = y * Math.floor(imageInfo.height/dimension);
+            x = x * Math.floor(imageInfo.width / imgWidth);
+            y = y * Math.floor(imageInfo.height / imgHeight);
             const scaledWidth = Math.floor(imageInfo.width/magnificationLevel);
             const scaledHeight = Math.floor(imageInfo.height/magnificationLevel);
-            x = x - ~~(scaledWidth/2);
-            y = y - ~~(scaledHeight/2);
+            x = x - Math.floor(scaledWidth / 2);
+            y = y - Math.floor(scaledHeight / 2);
             const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpeg';
             await extractRandomTile([x, y], scaledWidth, scaledHeight, imageURL, imageDiv, fileName);
         }
@@ -282,7 +282,7 @@ const getPixelsWithTissue = (array) => {
         const blue = array[i+2];
         const pixelArray = [red, green, blue, pixelCounter];
         allPixels.push(pixelArray);
-        if(red < 230 && green < 230 && blue < 230) pixelsWithTissue.push(pixelArray);
+        if(red < upperThreshold && green < upperThreshold && blue < upperThreshold) pixelsWithTissue.push(pixelArray);
         pixelCounter++;
     }
     return pixelsWithTissue;
@@ -336,7 +336,7 @@ const canvasHandler = (blob, fileName, desiredResolution, thumbnailDiv, smallerI
     
             canvas.dataset.fileName = fileName;
             canvas.classList.add('uploadCanvas');
-            // const threshold = 240;
+            
             if(avgBlue < upperThreshold && avgGreen < upperThreshold && avgRed < upperThreshold) {
                 canvas.classList.add('tile-thumbnail-selected');
             }
@@ -362,40 +362,55 @@ const getWholeSlidePixelData = (blob, desiredResolution, imageDiv) => {
             maxResolution = Math.max(img.width, img.height);
             const canvas = document.createElement('canvas');
             let ratio = maxResolution / desiredResolution;
-            canvas.width = desiredResolution;
-            canvas.height = desiredResolution;
+            canvas.width = img.width;
+            canvas.height = img.height;
             const ctx = canvas.getContext('2d');
             let x = img.width === maxResolution ? 0 : Math.floor(Math.abs(desiredResolution - img.width / ratio) * 0.5);
             let y = img.height === maxResolution ? 0 : Math.floor(Math.abs(desiredResolution - img.height / ratio) * 0.5);
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, desiredResolution, desiredResolution);
-            ctx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
-            canvas.classList.add('whole-image');
+            
+            // ctx.fillStyle = 'white';
+            // ctx.fillRect(0, 0, desiredResolution, desiredResolution);
+            // ctx.drawImage(img, 0, 0, maxResolution, maxResolution, x, y, desiredResolution, desiredResolution);
+            // canvas.classList.add('whole-image');
+            ctx.drawImage(img, 0, 0, img.width, img.height);
             imageDiv.appendChild(canvas);
             const br = document.createElement('br');
             imageDiv.appendChild(br);
-            const imageData = ctx.getImageData(0, 0, desiredResolution, desiredResolution).data;
+            const imageData = ctx.getImageData(0, 0, img.width, img.height).data;
             const tiles = document.getElementById('noOfTiles').value;
             const desiredCoordinates = [];
             const pixelsWithTissue = getPixelsWithTissue(imageData);
 
             for(let i = 0; i < pixelsWithTissue.length; i++) {
-                const [pixelX, pixelY] = getRandomPixels(pixelsWithTissue, desiredResolution);
+                const pixelX = pixelsWithTissue[i][3] % desiredResolution;
+                const pixelY = Math.floor(pixelsWithTissue[i][3] / desiredResolution);
                 ctx.beginPath();
                 ctx.arc(pixelX, pixelY, 1, 0, 1 * Math.PI);
                 ctx.strokeStyle = 'rgba(109, 222, 117, 0.3)';
                 ctx.stroke();
-
             }
+            
+            const buffer = 50;
+            let lowerX = buffer;
+            let lowerY = buffer;
+            let upperX = img.width - buffer;
+            let upperY = img.height - buffer;
 
             for(let i = 0; i < tiles; i++) {
-                let [tileX, tileY] = getRandomPixels(pixelsWithTissue, desiredResolution);
-                ctx.rect(tileX - 25, tileY - 25, 50, 50);
-                ctx.strokeStyle = 'red';
-                ctx.stroke();
-                desiredCoordinates.push([tileX, tileY]);
+                let isValid = false;
+                while(!isValid) {  
+                    let [tileX, tileY] = getRandomPixels(pixelsWithTissue, desiredResolution);
+                    if(tileX < lowerX || tileX > upperX || tileY < lowerY || tileY > upperY) continue;
+                    tileX = tileX - 15;
+                    tileY = tileY - 15;
+                    ctx.rect(tileX, tileY, 30, 30);
+                    ctx.strokeStyle = 'red';
+                    ctx.stroke();
+                    desiredCoordinates.push([tileX, tileY]);
+                    isValid = true;
+                }
             }
-            resolve(desiredCoordinates);
+            resolve([desiredCoordinates, img.width, img.height]);
         }
     })
     
