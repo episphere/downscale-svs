@@ -217,7 +217,7 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
         imageDiv.classList = 'row';
         imageDiv.id = 'imageDiv';
         const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: dimension})).blob();
-        const [desiredCoordinates, imgWidth, imgHeight] = await getWholeSlidePixelData(blob, dimension, imageDiv);
+        const [desiredCoordinates, imgWidth, imgHeight] = await getWholeSlidePixelData(blob, dimension, imageDiv, imageInfo);
         document.body.appendChild(imageDiv);
         for(let i = 0; i < desiredCoordinates.length; i++) {
             let x = desiredCoordinates[i][0];
@@ -350,7 +350,7 @@ const canvasHandler = (blob, fileName, desiredResolution, thumbnailDiv, smallerI
     
 }
 
-const getWholeSlidePixelData = (blob, desiredResolution, imageDiv) => {
+const getWholeSlidePixelData = (blob, desiredResolution, imageDiv, imageInfo) => {
     return new Promise((resolve, reject) => {
         let maxResolution = 512;
         const response = URL.createObjectURL(blob);
@@ -390,20 +390,24 @@ const getWholeSlidePixelData = (blob, desiredResolution, imageDiv) => {
                 ctx.stroke();
             }
             
-            const buffer = 50;
-            let lowerX = buffer;
-            let lowerY = buffer;
+            const magnification = document.getElementById('magnificationLevel').value;
+            const rectSize = Math.min(Math.floor(img.width / magnification), Math.floor(img.height / magnification));
+            const buffer = Math.floor(rectSize / 2);
+            let lowerX = rectSize;
+            let lowerY = rectSize;
             let upperX = img.width - buffer;
             let upperY = img.height - buffer;
-
+            
             for(let i = 0; i < tiles; i++) {
                 let isValid = false;
                 while(!isValid) {  
                     let [tileX, tileY] = getRandomPixels(pixelsWithTissue, desiredResolution);
                     if(tileX < lowerX || tileX > upperX || tileY < lowerY || tileY > upperY) continue;
-                    tileX = tileX - 15;
-                    tileY = tileY - 15;
-                    ctx.rect(tileX, tileY, 30, 30);
+                    
+                    tileX = tileX - buffer;
+                    tileY = tileY - buffer;
+
+                    ctx.rect(tileX, tileY, rectSize, rectSize);
                     ctx.strokeStyle = 'red';
                     ctx.stroke();
                     desiredCoordinates.push([tileX, tileY]);
