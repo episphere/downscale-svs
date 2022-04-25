@@ -23,7 +23,7 @@ const radioHandler = () => {
                         Tiles to extract: <input type="number" id="noOfTiles" min="4" max="20" value="4">
                     </div>
                     <div class="new-line mr-top-10">
-                        Maginification level: <input type="number" id="magnificationLevel" min="3" max="60" value="10"> x
+                        Maginification level: <input type="number" id="magnificationLevel" min="5" max="60" value="10"> x
                     </div>
                     
                 `;
@@ -392,12 +392,11 @@ const getWholeSlidePixelData = (blob, desiredResolution, imageDiv, imageInfo) =>
             
             const magnification = document.getElementById('magnificationLevel').value;
             const rectSize = Math.min(Math.floor(img.width / magnification), Math.floor(img.height / magnification));
-            const maxRectSize = Math.max(Math.floor(img.width / magnification), Math.floor(img.height / magnification));
             const buffer = Math.floor(rectSize / 2);
-            let lowerX = maxRectSize;
-            let lowerY = maxRectSize;
-            let upperX = img.width - maxRectSize;
-            let upperY = img.height - maxRectSize;
+            let lowerX = 30;
+            let lowerY = 30;
+            let upperX = img.width - 30;
+            let upperY = img.height - 30;
             
             for(let i = 0; i < tiles; i++) {
                 let isValid = false;
@@ -421,12 +420,12 @@ const getWholeSlidePixelData = (blob, desiredResolution, imageDiv, imageInfo) =>
     
 }
 
-const extractRandomTile = async ([x, y], widthIncrements, heightIncrements, imageURL, imageDiv, fileName) => {
+const extractRandomTile = async ([tilex, tiley], widthIncrements, heightIncrements, imageURL, imageDiv, fileName) => {
     return new Promise(async (resolve, reject) => {
         let tileParams = {
             tileSize: 1024,
-            tileX: x,
-            tileY: y,
+            tileX: tilex,
+            tileY: tiley,
             tileWidth: Math.max(widthIncrements, heightIncrements),
             tileHeight: Math.max(widthIncrements, heightIncrements)
         };
