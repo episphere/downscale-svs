@@ -339,6 +339,8 @@ const canvasHandler = (blob, fileName, desiredResolution, thumbnailDiv, smallerI
             
             if(avgBlue < upperThreshold && avgGreen < upperThreshold && avgRed < upperThreshold) {
                 canvas.classList.add('tile-thumbnail-selected');
+                const selectedTiles = Array.from(document.querySelectorAll('.tile-thumbnail-selected'));
+                if(selectedTiles.length > 0) document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length + 1} tile(s) to BOX`;
             }
     
             if(smallerImage) canvas.classList.add("tile-thumbnail")
@@ -468,6 +470,8 @@ const extractRandomTile = async ([tilex, tiley], widthIncrements, heightIncremen
             const avgBlue = Math.floor(rgb.b / count);
             if(avgBlue < upperThreshold && avgGreen < upperThreshold && avgRed < upperThreshold && avgBlue > lowerThreshold && avgGreen > lowerThreshold && avgRed > lowerThreshold) {
                 canvas.classList.add('tile-thumbnail-selected');
+                const selectedTiles = Array.from(document.querySelectorAll('.tile-thumbnail-selected'));
+                if(selectedTiles.length > 0) document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length + 1} tile(s) to BOX`;
             }
             canvas.dataset.fileName = fileName;
             canvas.classList.add('uploadCanvas');
