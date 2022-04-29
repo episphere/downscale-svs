@@ -228,7 +228,7 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
             const scaledHeight = Math.floor(imageInfo.height/magnificationLevel);
             x = x - Math.floor(scaledWidth / 2);
             y = y - Math.floor(scaledHeight / 2);
-            const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+`_${magnificationLevel}x_${i+1}.jpeg`;
+            const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+`x${x}_y${y}_${Math.max(scaledWidth, scaledHeight)}_1024_${magnificationLevel}x_${i+1}.jpeg`;
             await extractRandomTile([x, y], scaledWidth, scaledHeight, imageURL, imageDiv, fileName);
         }
         canvasEvents();
