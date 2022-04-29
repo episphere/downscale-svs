@@ -1,0 +1,571 @@
+set,image_path,label
+TRAIN,gs://melanoma-automl/tiles/Slide-0773209_34203010 N1_1023936_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773209_34203010 N1_1023936_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773209_34203010 N1_1023936_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773209_34203010 N1_1023936_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773210_34203010 N2_1024285_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773210_34203010 N2_1024285_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773210_34203010 N2_1024285_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773210_34203010 N2_1024285_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773213_34203015 N5_1023938_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773213_34203015 N5_1023938_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773213_34203015 N5_1023938_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773213_34203015 N5_1023938_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773214_12603003 N6_1023939_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773214_12603003 N6_1023939_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773214_12603003 N6_1023939_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773216_12603003 N8_1023941_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773216_12603003 N8_1023941_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773217_12603003 N9_1024095_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773217_12603003 N9_1024095_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773217_12603003 N9_1024095_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773217_12603003 N9_1024095_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773218_25501013 N10_1024279_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773218_25501013 N10_1024279_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773218_25501013 N10_1024279_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773219_25501013 N11_1023942_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773219_25501013 N11_1023942_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773220_37701008 N12_1023943_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773220_37701008 N12_1023943_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773220_37701008 N12_1023943_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773220_37701008 N12_1023943_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773221_37701008 N13_1024294_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773221_37701008 N13_1024294_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773222_34205030 N14_1024096_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773222_34205030 N14_1024096_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773222_34205030 N14_1024096_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773222_34205030 N14_1024096_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773223_34205030 N15_1023944_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773223_34205030 N15_1023944_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773223_34205030 N15_1023944_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773223_34205030 N15_1023944_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773224_34205030 N16_1023945_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773224_34205030 N16_1023945_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773224_34205030 N16_1023945_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773224_34205030 N16_1023945_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773225_37203003 N17_1023946_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773225_37203003 N17_1023946_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773226_37701020 N18_1023947_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773226_37701020 N18_1023947_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773226_37701020 N18_1023947_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773229_37703005 N21_1023950_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773231_48101001 N23_1024027_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773231_48101001 N23_1024027_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773232_56701001 N24_1024097_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773232_56701001 N24_1024097_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773232_56701001 N24_1024097_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773232_56701001 N24_1024097_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773235_56701001 N27_1023952_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773235_56701001 N27_1023952_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773235_56701001 N27_1023952_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773235_56701001 N27_1023952_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773238_290501006 N30_1024278_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773238_290501006 N30_1024278_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773238_290501006 N30_1024278_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773238_290501006 N30_1024278_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773239_295001001 N31_1023955_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773239_295001001 N31_1023955_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773239_295001001 N31_1023955_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773239_295001001 N31_1023955_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773240_298101011 N32_1023956_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773240_298101011 N32_1023956_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773240_298101011 N32_1023956_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773240_298101011 N32_1023956_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773241_298101016 N33_1023957_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773241_298101016 N33_1023957_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773242_298102009 N34_1023440_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773242_298102009 N34_1023440_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773242_298102009 N34_1023440_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773242_298102009 N34_1023440_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773243_298101016 N35_1023958_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773243_298101016 N35_1023958_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773243_298101016 N35_1023958_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773243_298101016 N35_1023958_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773244_298103008 N36_1023959_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773244_298103008 N36_1023959_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773244_298103008 N36_1023959_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773244_298103008 N36_1023959_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773245_298105022 N37_1023960_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773245_298105022 N37_1023960_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773245_298105022 N37_1023960_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773245_298105022 N37_1023960_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773246_315801001 N38_1023961_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773247_322401001 N39_1023962_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773247_322401001 N39_1023962_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773247_322401001 N39_1023962_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773247_322401001 N39_1023962_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773248_328803006 N40_1024008_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773248_328803006 N40_1024008_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773248_328803006 N40_1024008_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773249_328801014 N41_1023964_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773249_328801014 N41_1023964_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773249_328801014 N41_1023964_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773249_328801014 N41_1023964_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773250_48101002 N42_1024291_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773250_48101002 N42_1024291_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773252_56702004 N44_1024024_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773252_56702004 N44_1024024_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773252_56702004 N44_1024024_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773253_87301026 N45_1023965_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773254_87301007 N46_1023966_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773254_87301007 N46_1023966_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773254_87301007 N46_1023966_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773254_87301007 N46_1023966_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773255_87301011 N47_1023967_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773255_87301011 N47_1023967_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773255_87301011 N47_1023967_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773255_87301011 N47_1023967_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773256_87303038 N48_1023968_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773256_87303038 N48_1023968_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773256_87303038 N48_1023968_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773256_87303038 N48_1023968_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773257_87304002 N49_1024295_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773257_87304002 N49_1024295_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773257_87304002 N49_1024295_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773257_87304002 N49_1024295_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773258_92801002 N50_1024025_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773258_92801002 N50_1024025_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773258_92801002 N50_1024025_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773259_92801002 N51_1023969_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773259_92801002 N51_1023969_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773259_92801002 N51_1023969_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773259_92801002 N51_1023969_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773260_92801002 N52_1023970_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773260_92801002 N52_1023970_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773261_92801002 N53_1023971_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773261_92801002 N53_1023971_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773262_92801004 N54_1024314_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773262_92801004 N54_1024314_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773262_92801004 N54_1024314_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773262_92801004 N54_1024314_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773263_92801002 N55_1023972_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773263_92801002 N55_1023972_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773263_92801002 N55_1023972_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773263_92801002 N55_1023972_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773265_335204002 N57_1023973_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773265_335204002 N57_1023973_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773265_335204002 N57_1023973_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773265_335204002 N57_1023973_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773266_392302005 N58_1023974_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773266_392302005 N58_1023974_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773268_408401001 N60_1023976_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773268_408401001 N60_1023976_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773269_408401012 N61_1023977_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773269_408401012 N61_1023977_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773269_408401012 N61_1023977_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773269_408401012 N61_1023977_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773270_408401012 N62_1024026_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773270_408401012 N62_1024026_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773270_408401012 N62_1024026_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773274_438501001 N66_1023980_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773274_438501001 N66_1023980_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773274_438501001 N66_1023980_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773274_438501001 N66_1023980_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773275_477901003 N67_1023981_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773275_477901003 N67_1023981_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773275_477901003 N67_1023981_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773275_477901003 N67_1023981_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773276_504501001 N68_1024292_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773276_504501001 N68_1024292_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773276_504501001 N68_1024292_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773277_504502001 N69_1023982_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773277_504502001 N69_1023982_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773277_504502001 N69_1023982_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773281_431701001 N73_1023985_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773281_431701001 N73_1023985_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773281_431701001 N73_1023985_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773281_431701001 N73_1023985_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773282_41901001 N74_1024315_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773282_41901001 N74_1024315_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773282_41901001 N74_1024315_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773282_41901001 N74_1024315_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773283_41701001 N75_1023986_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773283_41701001 N75_1023986_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773283_41701001 N75_1023986_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773283_41701001 N75_1023986_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773284_62101036 N76_1023987_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773284_62101036 N76_1023987_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773285_92801004 N77_1023988_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773285_92801004 N77_1023988_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773285_92801004 N77_1023988_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773288_87601001 N80_1023990_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773288_87601001 N80_1023990_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773288_87601001 N80_1023990_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773288_87601001 N80_1023990_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773292_506201005 N84_1024100_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773292_506201005 N84_1024100_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773292_506201005 N84_1024100_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773292_506201005 N84_1024100_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773293_504501003 N85_1023993_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773293_504501003 N85_1023993_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773293_504501003 N85_1023993_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773293_504501003 N85_1023993_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773294_504501001 N86_1024101_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773294_504501001 N86_1024101_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773294_504501001 N86_1024101_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773295_476102002 N87_1023994_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773295_476102002 N87_1023994_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773296_454202001 N88_1023995_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773296_454202001 N88_1023995_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773296_454202001 N88_1023995_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773296_454202001 N88_1023995_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773297_433301001 N89_1023996_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773297_433301001 N89_1023996_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773297_433301001 N89_1023996_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773298_431703020 N90_1023997_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773298_431703020 N90_1023997_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773298_431703020 N90_1023997_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773298_431703020 N90_1023997_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773299_431701004 N91_1023998_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773299_431701004 N91_1023998_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773299_431701004 N91_1023998_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773300_101601032 N92_1023999_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773300_101601032 N92_1023999_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773300_101601032 N92_1023999_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773301_101602008 N93_1024102_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773301_101602008 N93_1024102_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773301_101602008 N93_1024102_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773302_101603008 N94_1024000_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773302_101603008 N94_1024000_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773302_101603008 N94_1024000_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773302_101603008 N94_1024000_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773303_101701008 N95_1024001_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773303_101701008 N95_1024001_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773303_101701008 N95_1024001_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773303_101701008 N95_1024001_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773304_120101001 N96_1024312_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773304_120101001 N96_1024312_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773304_120101001 N96_1024312_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773305_213401001 N97_1024310_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773305_213401001 N97_1024310_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773305_213401001 N97_1024310_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773306_232701001 N98_1024311_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773306_232701001 N98_1024311_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773306_232701001 N98_1024311_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773318_284303034 N109_1024019_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773318_284303034 N109_1024019_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773318_284303034 N109_1024019_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773322_248201008 N113_1023929_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773322_248201008 N113_1023929_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773322_248201008 N113_1023929_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773322_248201008 N113_1023929_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773323_248201006 N114_1024038_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773323_248201006 N114_1024038_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773324_248201004 N115_1024121_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773324_248201004 N115_1024121_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773324_248201004 N115_1024121_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773325_199301001 N116_1024296_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773325_199301001 N116_1024296_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773326_101701008 N117_1024040_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773326_101701008 N117_1024040_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773326_101701008 N117_1024040_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773326_101701008 N117_1024040_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773327_248201006 N118_1024041_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773327_248201006 N118_1024041_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773327_248201006 N118_1024041_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773327_248201006 N118_1024041_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773328_203501001 N119_1024042_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773328_203501001 N119_1024042_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773328_203501001 N119_1024042_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773330_248201006 N121_1024044_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773330_248201006 N121_1024044_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773330_248201006 N121_1024044_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773330_248201006 N121_1024044_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773331_110903008 N122_1024290_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773331_110903008 N122_1024290_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773331_110903008 N122_1024290_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773331_110903008 N122_1024290_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773332_92803019 N123_1023904_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773332_92803019 N123_1023904_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773332_92803019 N123_1023904_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773332_92803019 N123_1023904_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773338_74101008 N129_1024049_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773338_74101008 N129_1024049_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773338_74101008 N129_1024049_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773338_74101008 N129_1024049_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773339_74103012 N130_1024050_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773339_74103012 N130_1024050_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773339_74103012 N130_1024050_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773340_74103013 N131_1024051_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773340_74103013 N131_1024051_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773340_74103013 N131_1024051_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773341_92802005 N132_1024280_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773341_92802005 N132_1024280_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773341_92802005 N132_1024280_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773341_92802005 N132_1024280_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773342_92802006 N133_1024052_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773342_92802006 N133_1024052_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773343_285101002 N134_1024060_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773343_285101002 N134_1024060_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773343_285101002 N134_1024060_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773343_285101002 N134_1024060_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773347_288401001 N137_1024055_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773347_288401001 N137_1024055_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773349_290501008 N139_1024284_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773349_290501008 N139_1024284_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773349_290501008 N139_1024284_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773349_290501008 N139_1024284_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773350_290501008 N140_1024057_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773350_290501008 N140_1024057_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773350_290501008 N140_1024057_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773351_298201001 N141_1024058_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773351_298201001 N141_1024058_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773351_298201001 N141_1024058_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773351_298201001 N141_1024058_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773354_400103004 N144_1024061_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773354_400103004 N144_1024061_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773354_400103004 N144_1024061_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773355_400101001 N145_1024062_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773355_400101001 N145_1024062_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773355_400101001 N145_1024062_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773357_331901001 N147_1024063_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773357_331901001 N147_1024063_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773357_331901001 N147_1024063_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773357_331901001 N147_1024063_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773358_331103021 N148_1024064_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773358_331103021 N148_1024064_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773358_331103021 N148_1024064_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773358_331103021 N148_1024064_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773359_322401002 N149_1024065_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773359_322401002 N149_1024065_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773359_322401002 N149_1024065_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773360_62101036 N150_1024066_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773360_62101036 N150_1024066_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773360_62101036 N150_1024066_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773360_62101036 N150_1024066_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773361_92802005 N151_1024067_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773361_92802005 N151_1024067_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773361_92802005 N151_1024067_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773363_368601001 N153_1024068_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773363_368601001 N153_1024068_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773363_368601001 N153_1024068_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773363_368601001 N153_1024068_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773364_368603006 N154_1024069_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773364_368603006 N154_1024069_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773364_368603006 N154_1024069_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773364_368603006 N154_1024069_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773382_454201001 N171_1024082_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773382_454201001 N171_1024082_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773382_454201001 N171_1024082_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773385_493003002 N174_1024084_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773385_493003002 N174_1024084_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773386_438503002 N175_1024085_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773386_438503002 N175_1024085_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773388_412901001 N177_1024087_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773388_412901001 N177_1024087_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773388_412901001 N177_1024087_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773389_416201001 N178_1024318_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773389_416201001 N178_1024318_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773389_416201001 N178_1024318_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773389_416201001 N178_1024318_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773390_440801002 N179_1024088_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773390_440801002 N179_1024088_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773390_440801002 N179_1024088_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773390_440801002 N179_1024088_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773391_440802002 N180_1024107_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773391_440802002 N180_1024107_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773391_440802002 N180_1024107_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773391_440802002 N180_1024107_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773392_440802002 N181_1024089_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773392_440802002 N181_1024089_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773392_440802002 N181_1024089_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773393_92801002 N182_1024090_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773393_92801002 N182_1024090_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773393_92801002 N182_1024090_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773394_92801002 N183_1024091_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773394_92801002 N183_1024091_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773394_92801002 N183_1024091_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773394_92801002 N183_1024091_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773395_92801002 N184_1024092_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773395_92801002 N184_1024092_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773395_92801002 N184_1024092_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773397_92801002 N186_1024297_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773397_92801002 N186_1024297_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773397_92801002 N186_1024297_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773398_92801004 N187_1024093_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773398_92801004 N187_1024093_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773398_92801004 N187_1024093_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773398_92801004 N187_1024093_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773399_201703005 N188_1024108_10x_1.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773399_201703005 N188_1024108_10x_2.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773399_201703005 N188_1024108_10x_3.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0773399_201703005 N188_1024108_10x_4.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773400_220901001 N189_1024094_10x_1.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773400_220901001 N189_1024094_10x_2.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773400_220901001 N189_1024094_10x_3.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773400_220901001 N189_1024094_10x_4.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773401_224801001 N190_1024298_10x_1.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773401_224801001 N190_1024298_10x_2.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773401_224801001 N190_1024298_10x_3.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773407_92802005 N196_1024110_10x_1.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773407_92802005 N196_1024110_10x_2.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773407_92802005 N196_1024110_10x_3.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773407_92802005 N196_1024110_10x_4.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773408_56701012 N197_1024111_10x_1.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773408_56701012 N197_1024111_10x_2.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773408_56701012 N197_1024111_10x_3.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773408_56701012 N197_1024111_10x_4.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0817960_12603001 P97-31728-4_1024010_10x_1.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0817960_12603001 P97-31728-4_1024010_10x_2.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0817960_12603001 P97-31728-4_1024010_10x_3.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0817960_12603001 P97-31728-4_1024010_10x_4.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773212_34203010 N4_1023937_10x_1.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773212_34203010 N4_1023937_10x_2.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773212_34203010 N4_1023937_10x_3.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773212_34203010 N4_1023937_10x_4.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773271_408401034 N63_1024114_10x_1.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773271_408401034 N63_1024114_10x_2.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773271_408401034 N63_1024114_10x_3.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773271_408401034 N63_1024114_10x_4.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773272_408401049 N64_1023978_10x_1.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773272_408401049 N64_1023978_10x_2.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773272_408401049 N64_1023978_10x_3.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773272_408401049 N64_1023978_10x_4.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773278_509301005 N70_1023983_10x_1.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773278_509301005 N70_1023983_10x_2.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773278_509301005 N70_1023983_10x_3.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773278_509301005 N70_1023983_10x_4.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773279_522102010 N71_1024271_10x_1.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773279_522102010 N71_1024271_10x_2.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773279_522102010 N71_1024271_10x_3.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773279_522102010 N71_1024271_10x_4.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773280_541101001 N72_1023984_10x_1.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773280_541101001 N72_1023984_10x_2.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773280_541101001 N72_1023984_10x_3.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773280_541101001 N72_1023984_10x_4.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773291_509301001 N83_1023992_10x_2.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773291_509301001 N83_1023992_10x_3.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773291_509301001 N83_1023992_10x_4.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773314_539001002 N105_1024016_10x_1.jpeg,Non-POT1
+TEST,gs://melanoma-automl/tiles/Slide-0773314_539001002 N105_1024016_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773314_539001002 N105_1024016_10x_3.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773314_539001002 N105_1024016_10x_4.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773315_539001001 N106_1024017_10x_1.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773315_539001001 N106_1024017_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773316_539001001 N107_1024103_10x_1.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773316_539001001 N107_1024103_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773316_539001001 N107_1024103_10x_3.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773316_539001001 N107_1024103_10x_4.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773317_538901001 N108_1024018_10x_1.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773317_538901001 N108_1024018_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773317_538901001 N108_1024018_10x_3.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773317_538901001 N108_1024018_10x_4.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773348_290501001 N138_1024056_10x_1.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773348_290501001 N138_1024056_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773348_290501001 N138_1024056_10x_4.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773365_408401031 N155_1024309_10x_1.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773365_408401031 N155_1024309_10x_3.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773365_408401031 N155_1024309_10x_4.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773366_408401049 N156_1024105_10x_1.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773366_408401049 N156_1024105_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773366_408401049 N156_1024105_10x_3.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773366_408401049 N156_1024105_10x_4.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773367_408401052 N157_1023931_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773367_408401052 N157_1023931_10x_4.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773369_408402019 N159_1024071_10x_1.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773369_408402019 N159_1024071_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773369_408402019 N159_1024071_10x_3.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773369_408402019 N159_1024071_10x_4.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773370_408402021 N160_1024072_10x_1.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773370_408402021 N160_1024072_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773370_408402021 N160_1024072_10x_3.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773370_408402021 N160_1024072_10x_4.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773371_436501001 N161_1024116_10x_1.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773371_436501001 N161_1024116_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773371_436501001 N161_1024116_10x_3.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773371_436501001 N161_1024116_10x_4.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773374_499401002 N164_1024106_10x_1.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773374_499401002 N164_1024106_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773374_499401002 N164_1024106_10x_3.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773374_499401002 N164_1024106_10x_4.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773376_509301005 N166_1024076_10x_1.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773376_509301005 N166_1024076_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773376_509301005 N166_1024076_10x_3.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0773376_509301005 N166_1024076_10x_4.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0922440_225783_1024565_10x_1.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0922440_225783_1024565_10x_2.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0922440_225783_1024565_10x_3.jpeg,Non-POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0922440_225783_1024565_10x_4.jpeg,Non-POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0033472_4459-01-001_1004075_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0033472_4459-01-001_1004075_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0033472_4459-01-001_1004075_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0033472_4459-01-001_1004075_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0033473_4328-01-002_1004077_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0033473_4328-01-002_1004077_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0033473_4328-01-002_1004077_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0033473_4328-01-002_1004077_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0033474_08966-004_1004076_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0033474_08966-004_1004076_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0033474_08966-004_1004076_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0033474_08966-004_1004076_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049905_3876-01-001_1010436_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049905_3876-01-001_1010436_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049905_3876-01-001_1010436_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049906_3876-02-004_1010338_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049906_3876-02-004_1010338_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049906_3876-02-004_1010338_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049906_3876-02-004_1010338_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049907_3877-01-001_1010430_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049907_3877-01-001_1010430_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049907_3877-01-001_1010430_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049908_3877-02-002_1_1010435_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049908_3877-02-002_1_1010435_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049908_3877-02-002_1_1010435_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049909_3877-02-002_2_1010434_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049909_3877-02-002_2_1010434_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049909_3877-02-002_2_1010434_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049909_3877-02-002_2_1010434_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049910_3879-01-001_1010433_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049910_3879-01-001_1010433_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049910_3879-01-001_1010433_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049911_4328-01-001_1010341_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049911_4328-01-001_1010341_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049911_4328-01-001_1010341_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049913_4449-01-001_1010432_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049913_4449-01-001_1010432_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049913_4449-01-001_1010432_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049913_4449-01-001_1010432_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049914_4459-02-001_1010431_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049914_4459-02-001_1010431_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049915_5032-03-001_1010238_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049915_5032-03-001_1010238_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0049915_5032-03-001_1010238_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729779_278183_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729779_278183_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729779_278183_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729779_278183_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729780_278217_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729780_278217_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729780_278217_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729780_278217_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729781_278224_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729781_278224_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729781_278224_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729781_278224_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729782_282560_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729782_282560_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729782_282560_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729782_282560_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729783_284235_10x_1.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729783_284235_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729783_284235_10x_4.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729784_284365_10x_2.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729784_284365_10x_3.jpeg,POT1
+TRAIN,gs://melanoma-automl/tiles/Slide-0729784_284365_10x_4.jpeg,POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0729785_284703_10x_1.jpeg,POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0729785_284703_10x_2.jpeg,POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0729785_284703_10x_3.jpeg,POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0729785_284703_10x_4.jpeg,POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0729786_285887_10x_1.jpeg,POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0729786_285887_10x_2.jpeg,POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0729786_285887_10x_3.jpeg,POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0729786_285887_10x_4.jpeg,POT1
+VALIDATION,gs://melanoma-automl/tiles/Slide-0729787_286011_10x_2.jpeg,POT1
+TEST,gs://melanoma-automl/tiles/Slide-0922441_475294_1024566_10x_1.jpeg,POT1
+TEST,gs://melanoma-automl/tiles/Slide-0922441_475294_1024566_10x_2.jpeg,POT1
+TEST,gs://melanoma-automl/tiles/Slide-0922441_475294_1024566_10x_3.jpeg,POT1
+TEST,gs://melanoma-automl/tiles/Slide-0922441_475294_1024566_10x_4.jpeg,POT1
+TEST,gs://melanoma-automl/tiles/Slide-0922442_137547_1024567_10x_1.jpeg,POT1
+TEST,gs://melanoma-automl/tiles/Slide-0922442_137547_1024567_10x_2.jpeg,POT1
+TEST,gs://melanoma-automl/tiles/Slide-0922442_137547_1024567_10x_3.jpeg,POT1
+TEST,gs://melanoma-automl/tiles/Slide-0922442_137547_1024567_10x_4.jpeg,POT1
