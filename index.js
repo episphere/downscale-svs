@@ -1,5 +1,5 @@
-// import imagebox3 from "https://episphere.github.io/imagebox3/imagebox3.mjs";
-import imagebox3 from "http://localhost:8081/imagebox3.mjs";
+import imagebox3 from "https://episphere.github.io/imagebox3/imagebox3.mjs";
+// import imagebox3 from "http://localhost:8081/imagebox3.mjs";
 const lowerThreshold = 150;
 const upperThreshold = 230;
 const FILENAME_FIELD_IN_LABELS_CSV = "HALO_image_link"
