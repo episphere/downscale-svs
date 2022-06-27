@@ -17,9 +17,21 @@
     <button onclick="localStorage.removeItem('epiboxtoken');location.reload()">Restart</button>
     <div class="row">
         <form action="post" id="folderIds">
-            <input type="text" required pattern="^[0-9]{12}$" id="inputFolderId" value="156562380907" placeholder="BOX input folder Id">
-            <input type="text" required pattern="^[0-9]{12}$" id="outputFolderId" value="160906438490" placeholder="BOX output folder Id">
-            
+            <div style="display:grid; grid-template-columns: 20rem 20rem; grid-template-rows: auto auto; row-gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 8rem 10rem;">
+                    <label for="inputFolderId">Input Folder ID:</label>
+                    <input type="text" required pattern="^[0-9]{12}$" id="inputFolderId" value="156562380907" placeholder="BOX input folder ID">
+                </div>
+                <div style="display: grid; grid-template-columns: 7rem 10rem;">
+                    <label for="inputLabelsCSV">Labels File ID:</label>
+                    <input type="text" pattern="^[0-9]{12}$" id="inputLabelsCSV" value="959041299209" placeholder="BOX Labels File ID">
+                </div>
+                <div style="display: grid; grid-template-columns: 8rem 10rem;">
+                    <label for="outputFolderId">Output Folder ID:</label>
+                    <input type="text" required pattern="^[0-9]{12}$" id="outputFolderId" value="160906438490" placeholder="BOX output folder ID">
+                </div>
+            </div>
+            <br>
             <div class="mr-top-10">
                 <input type="radio" checked name="extractTiles" value="allTiles" id="extractAllTiles">
                 <label for="extractAllTiles">Extract all tile(s)</label>

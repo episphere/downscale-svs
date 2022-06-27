@@ -94,3 +94,8 @@
 .tile-thumbnail-selected {
     border: 2px solid #084b77 !important;
 }
+
+.tileContainer {
+    display: inline-block;
+    text-align: center;
+}

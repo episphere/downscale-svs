@@ -1,6 +1,14 @@
-import imagebox3 from "https://episphere.github.io/imagebox3/imagebox3.mjs";
+// import imagebox3 from "https://episphere.github.io/imagebox3/imagebox3.mjs";
+import imagebox3 from "http://localhost:8081/imagebox3.mjs";
 const lowerThreshold = 150;
 const upperThreshold = 230;
+const FILENAME_FIELD_IN_LABELS_CSV = "HALO_image_link"
+const LABEL_FIELD_IN_LABELS_CSV = "cat1"
+
+const gcsUploadAPIPath = "https://us-east4-dl-test-tma.cloudfunctions.net/gcs-upload"
+const gcsFolderName = "test-folder"
+
+const automlAPIPath = "https://us-central1-dl-test-tma.cloudfunctions.net/setupAutoML"
 
 const initialize = () => {
     epibox.ini();
@@ -106,11 +114,56 @@ const getFolderIds = () => {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const inputFolderId = document.getElementById('inputFolderId').value;
+        const labelsFile = document.getElementById('inputLabelsCSV').value;
         const accessToken = JSON.parse(localStorage.epiBoxToken).access_token;
         let items = await getFolderItems(accessToken, inputFolderId);
         renderFileSelection(items.entries, accessToken);
+        if (labelsFile) {
+            localStorage.labels = getLabels(labelsFile, items.entries)
+        }
     })
     
+}
+
+const getLabels = async (labelsFile, entries) => {
+    const response = await getFileContent(JSON.parse(localStorage.epiBoxToken).access_token, labelsFile);
+    const labels = await response.text();
+    const csvRows = labels.split('\n').map(row => row.trim().split(','));
+    
+    const keyIndices = {}
+    const keys = csvRows.splice(0, 1)[0]
+    keyIndices[FILENAME_FIELD_IN_LABELS_CSV] = keys.indexOf(FILENAME_FIELD_IN_LABELS_CSV);
+    keyIndices[LABEL_FIELD_IN_LABELS_CSV] = keys.indexOf(LABEL_FIELD_IN_LABELS_CSV);
+    
+    const labelsObject = entries.reduce((obj, {id, name: filename}) => {
+        const csvRow = csvRows.find(row => row[keyIndices[FILENAME_FIELD_IN_LABELS_CSV]].trim().includes(filename));
+        const rowObj = {}
+        rowObj['fileID'] = id;
+        rowObj['filename'] = filename;
+        rowObj['label'] = csvRow[keyIndices[LABEL_FIELD_IN_LABELS_CSV]] === "POT1" ? "POT1" : "Non-POT1";
+        obj.push(rowObj)
+        return obj
+    }, [])
+
+    const idbOpenReq = window.indexedDB.open("labels", 1)
+    idbOpenReq.onupgradeneeded = (evt) => {
+        const db = evt.target.result;
+        if (!db.objectStoreNames.contains("labels")) {
+            db.createObjectStore("labels", { keyPath: "fileID" });
+        }
+    }
+
+    idbOpenReq.onsuccess = (evt) => {
+        const db = evt.target.result;
+        const tx = db.transaction("labels", "readwrite");
+        const store = tx.objectStore("labels");
+        store.clear();
+        labelsObject.forEach(label => {
+            store.add(label);
+        })
+    }
+
+    return JSON.stringify(labelsObject)
 }
 
 const getDownloadURL = async (accessToken, fileId) => {
@@ -128,11 +181,13 @@ const renderFileSelection = (files, accessToken) => {
     select.id = 'fileSelection';
     
     files.forEach((file, index) => {
-        const option = document.createElement('option');
-        option.value = file.id;
-        option.innerText = file.name;
-        if(index === 0) option.selected = true;
-        select.appendChild(option);
+        if (file.name.endsWith(".svs")) {
+            const option = document.createElement('option');
+            option.value = file.id;
+            option.innerText = file.name;
+            if(index === 0) option.selected = true;
+            select.appendChild(option);
+        }
     });
     div.appendChild(select);
     tileHandle(accessToken, select.value, files);
@@ -166,7 +221,7 @@ const tileHandle = async (accessToken, fileId, files) => {
     const imageURL = await getDownloadURL(accessToken, fileId);
     let imageInfo = null;
     imageInfo = await (await imagebox3.getImageInfo(imageURL)).json();
-    renderTileThumbnail(imageInfo, imageURL, fileName);
+    renderTileThumbnail(imageInfo, imageURL, fileName, fileId);
 }
 
 const getFileContent = async (accessToken, fileId, signal) => {
@@ -190,7 +245,7 @@ const getFolderItems = async (accessToken, folderId) => {
     return response.json();
 }
 
-const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
+const renderTileThumbnail = async (imageInfo, imageURL, imageName, fileId) => {
     let magnification = null;
     if(document.getElementById("myRange")) magnification = document.getElementById("myRange").value;
     if(document.getElementById('loaderDiv')) document.getElementById('loaderDiv').remove();
@@ -203,7 +258,7 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
     const div = document.createElement('div');
     div.id = 'uploadImageButon'
     div.classList = 'mr-bottom-10';
-    div.innerHTML = `<button id="uploadImage">Upload to BOX</button>`;
+    div.innerHTML = `<button id="uploadImage">Upload to: </button> <select id="cloudSelect"><option>Google Cloud Storage</option><option disabled>Box</option></select><button id="startAutoMLBtn" disabled>Start AutoML training</button>`;
     thumbnailDiv.appendChild(div);
     const canvases = Array.from(document.getElementsByClassName('uploadCanvas'));
     canvases.forEach(canvas => {
@@ -219,8 +274,9 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
         const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: dimension})).blob();
         const [desiredCoordinates, imgWidth, imgHeight] = await getWholeSlidePixelData(blob, dimension, imageDiv, imageInfo);
         document.body.appendChild(imageDiv);
+
         for(let i = 0; i < desiredCoordinates.length; i++) {
-            let x = desiredCoordinates[i][0];
+            let x = desiredCoordinates[i][0];   
             let y = desiredCoordinates[i][1];
             x = x * Math.floor(imageInfo.width / imgWidth);
             y = y * Math.floor(imageInfo.height / imgHeight);
@@ -228,15 +284,15 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
             const scaledHeight = Math.floor(imageInfo.height/magnificationLevel);
             x = x - Math.floor(scaledWidth / 2);
             y = y - Math.floor(scaledHeight / 2);
-            const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+`_x${x}_y${y}_${Math.max(scaledWidth, scaledHeight)}_1024_${magnificationLevel}x_${i+1}.jpeg`;
-            await extractRandomTile([x, y], scaledWidth, scaledHeight, imageURL, imageDiv, fileName);
+            const fileName = imageName.replaceAll(".", "_") + `_${x}_${y}_${Math.max(scaledWidth, scaledHeight)}_1024_${magnificationLevel}_${i+1}.jpg`;
+            await extractRandomTile([x, y], scaledWidth, scaledHeight, imageURL, imageDiv, fileName, fileId);
         }
         canvasEvents();
         handleImageUpload(imageDiv);
     }
     else if(magnification === '0') {
         const blob = await (await imagebox3.getImageThumbnail(imageURL, {thumbnailWidthToRender: 512})).blob();
-        const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'.jpeg';
+        const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'.jpg';
         canvasHandler(blob, fileName, 512, thumbnailDiv, false);
         handleImageUpload(thumbnailDiv);
     }
@@ -263,7 +319,7 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName) => {
                 tileHeight: heightIncrements
             };
             const tileBlob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
-            const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpeg';
+            const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpg';
             await canvasHandler(tileBlob, fileName, tileParams.tileSize, imageDiv, true);
         }
         canvasEvents();
@@ -282,7 +338,8 @@ const getPixelsWithTissue = (array) => {
         const blue = array[i+2];
         const pixelArray = [red, green, blue, pixelCounter];
         allPixels.push(pixelArray);
-        if(red < upperThreshold && green < upperThreshold && blue < upperThreshold) pixelsWithTissue.push(pixelArray);
+        if(red < upperThreshold && green < upperThreshold && blue < upperThreshold) 
+            pixelsWithTissue.push(pixelArray);
         pixelCounter++;
     }
     return pixelsWithTissue;
@@ -340,7 +397,7 @@ const canvasHandler = (blob, fileName, desiredResolution, thumbnailDiv, smallerI
             if(avgBlue < upperThreshold && avgGreen < upperThreshold && avgRed < upperThreshold) {
                 canvas.classList.add('tile-thumbnail-selected');
                 const selectedTiles = Array.from(document.querySelectorAll('.tile-thumbnail-selected'));
-                if(selectedTiles.length > 0) document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length + 1} tile(s) to BOX`;
+                if(selectedTiles.length > 0) document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length + 1} tile(s) to: `;
             }
     
             if(smallerImage) canvas.classList.add("tile-thumbnail")
@@ -363,6 +420,7 @@ const getWholeSlidePixelData = (blob, desiredResolution, imageDiv, imageInfo) =>
         img.onload = () => {
             maxResolution = Math.max(img.width, img.height);
             const canvas = document.createElement('canvas');
+            canvas.classList.add("imageThumbnail")
             let ratio = maxResolution / desiredResolution;
             canvas.width = img.width;
             canvas.height = img.height;
@@ -408,7 +466,7 @@ const getWholeSlidePixelData = (blob, desiredResolution, imageDiv, imageInfo) =>
                     
                     tileX = tileX - buffer;
                     tileY = tileY - buffer;
-
+                    
                     ctx.rect(tileX, tileY, rectSize, rectSize);
                     ctx.strokeStyle = 'red';
                     ctx.stroke();
@@ -422,10 +480,10 @@ const getWholeSlidePixelData = (blob, desiredResolution, imageDiv, imageInfo) =>
     
 }
 
-const extractRandomTile = async ([tilex, tiley], widthIncrements, heightIncrements, imageURL, imageDiv, fileName) => {
+const extractRandomTile = async ([tilex, tiley], widthIncrements, heightIncrements, imageURL, imageDiv, fileName, fileId) => {
     return new Promise(async (resolve, reject) => {
         let tileParams = {
-            tileSize: 1024,
+            tileSize: 256,
             tileX: tilex,
             tileY: tiley,
             tileWidth: Math.max(widthIncrements, heightIncrements),
@@ -433,15 +491,17 @@ const extractRandomTile = async ([tilex, tiley], widthIncrements, heightIncremen
         };
         const blob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
     
-        let maxResolution = 1024;
+        let maxResolution = 256;
         const response = URL.createObjectURL(blob);
         
         const img = new Image();
         img.src = response;
     
         img.onload = () => {
-            let desiredResolution = 1024;
+            let desiredResolution = 256;
             maxResolution = Math.max(img.width, img.height);
+            const tileContainer = document.createElement('div');
+            tileContainer.classList.add('tileContainer');
             const canvas = document.createElement('canvas');
             let ratio = maxResolution / desiredResolution;
             canvas.width = desiredResolution;
@@ -471,19 +531,40 @@ const extractRandomTile = async ([tilex, tiley], widthIncrements, heightIncremen
             if(avgBlue < upperThreshold && avgGreen < upperThreshold && avgRed < upperThreshold && avgBlue > lowerThreshold && avgGreen > lowerThreshold && avgRed > lowerThreshold) {
                 canvas.classList.add('tile-thumbnail-selected');
                 const selectedTiles = Array.from(document.querySelectorAll('.tile-thumbnail-selected'));
-                if(selectedTiles.length > 0) document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length + 1} tile(s) to BOX`;
+                if(selectedTiles.length > 0) document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length + 1} tile(s) to:`;
             }
             canvas.dataset.fileName = fileName;
             canvas.classList.add('uploadCanvas');
             canvas.classList.add("tile-thumbnail");
-            imageDiv.appendChild(canvas);
+            Object.entries(tileParams).forEach(([key, value]) => {
+                canvas.dataset[key] = value;
+            });
+            tileContainer.appendChild(canvas);
+            
+            const label = document.createElement('label');
+            const idbOpenReq = window.indexedDB.open('labels', 1);
+            idbOpenReq.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction(['labels'], 'readwrite');
+                const objectStore = transaction.objectStore('labels');
+                const getReq = objectStore.get(fileId);
+                getReq.onsuccess = (event) => {
+                    const { label: tileLabel } = event.target.result;
+                    label.innerHTML = `Label: ${tileLabel}`;
+                    canvas.dataset.label = tileLabel
+                }
+            }
+            
+            tileContainer.appendChild(document.createElement('br'));
+            tileContainer.appendChild(label);
+            imageDiv.appendChild(tileContainer);
             resolve(true)
         }
     })
 }
 
 const canvasEvents = () => {
-    const canvases = Array.from(document.querySelectorAll('canvas'));
+    const canvases = Array.from(document.querySelectorAll('canvas.uploadCanvas'));
     canvases.forEach(canvas => {
         canvas.addEventListener('click', e => {
             e.stopPropagation();
@@ -495,8 +576,10 @@ const canvasEvents = () => {
             }
 
             const selectedTiles = Array.from(document.querySelectorAll('.tile-thumbnail-selected'));
-            if(selectedTiles.length > 0) document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length} tile(s) to BOX`;
-            else document.getElementById('uploadImage').innerHTML = `Upload all tiles to BOX`;
+            if(selectedTiles.length > 0)
+                document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length} tile(s) to:`;
+            else
+                document.getElementById('uploadImage').innerHTML = `Upload all tiles to:`;
         });
     });
 }
@@ -517,42 +600,66 @@ const generateXYs = (rows, cols, height, width) => {
     return xys
 }
 
-const handleImageUpload = async (thumbnailDiv) => {
-    const button = document.getElementById('uploadImage');
-    button.addEventListener('click', () => {
+const handleImageUpload = async (thumbnailDiv, destCloud="gcs") => {
+    const uploadBtn = document.getElementById('uploadImage');
+    
+    uploadBtn.addEventListener('click', async () => {
+        const accessToken = JSON.parse(localStorage.epiBoxToken).access_token;
         let canvases;
         const selectedTiles = Array.from(document.querySelectorAll('.tile-thumbnail-selected'));
-        if(selectedTiles.length > 0) canvases = selectedTiles;
-        else canvases = Array.from(document.getElementsByClassName('uploadCanvas'));
+        if(selectedTiles.length > 0)
+            canvases = selectedTiles;
+        else
+            canvases = Array.from(document.getElementsByClassName('uploadCanvas'));
         
-        for(let c = 0; c < canvases.length; c++) {
+        for (let c=0; c<canvases.length; c++) {
             let fileName = canvases[c].dataset.fileName;
-            canvases[c].toBlob(async (blob) => {
-                const accessToken = JSON.parse(localStorage.epiBoxToken).access_token;
+            // canvases[c].toBlob(async (blob) => {
+            const tileParams = {
+                'tileX': canvases[c].dataset.tileX,
+                'tileY': canvases[c].dataset.tileY,
+                'tileWidth': canvases[c].dataset.tileWidth,
+                'tileHeight': canvases[c].dataset.tileHeight,
+                'tileSize': 1024
+            }
+            const select = document.getElementById('fileSelection');
+            const imageURL = await getDownloadURL(accessToken, select.value)
+            const blob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
+
+            let message = '';
+            if (destCloud === "box") {
                 const outputFolderId = document.getElementById('outputFolderId').value;
                 const image = new File([blob], fileName, { type: blob.type });
                 const formData = new FormData();
                 formData.append('file', image);
                 formData.append('attributes', `{"name": "${fileName}", "parent": {"id": "${outputFolderId}"}}`);
-                let response = await uploadFile(accessToken, formData);
-                let message = '';
-                if(response.status === 201) message = `${fileName} uploaded successfully</span>`;
+                let response = await uploadFileToBox(accessToken, formData);
+                if(response.status === 201)
+                    message = `${fileName} uploaded successfully</span>`;
                 if(response.status === 409) {
                     const json = await response.json();
                     const existingFileId = json.context_info.conflicts.id;
                     uploadNewVersion(accessToken, existingFileId, formData);
                     message = `${fileName} uploaded new version</span>`;
                 }
-                const p = document.createElement('p');
-                p.innerHTML = `<span class="success">${message}</span>`;
-                thumbnailDiv.appendChild(p);
-            }, 'image/jpeg', 1);
+            } else if (destCloud === "gcs") {
+                const gcsFilePath = await uploadFileToGCS(accessToken, fileName, blob, "image/jpeg")
+                message = `${fileName} uploaded successfully</span>`;
+                await updateLabelsCSV(gcsFilePath, canvases[c].dataset.label);
+            }
+            const p = document.createElement('p');
+            p.innerHTML = `<span class="success">${message}</span>`;
+            thumbnailDiv.appendChild(p);
+            // }, 'image/jpeg', 1);
         }
         
     })
+
+    const startAutoMLBtn = document.getElementById('startAutoMLBtn');
+    startAutoMLBtn.addEventListener('click', startAutoMLTraining);
 }
 
-const uploadFile = async (accessToken, formData) => {
+const uploadFileToBox = async (accessToken, formData) => {
     const response = await fetch("https://upload.box.com/api/2.0/files/content", {
         method: "POST",
         headers:{
@@ -562,6 +669,53 @@ const uploadFile = async (accessToken, formData) => {
         contentType: false
     });
     return response;
+}
+
+const uploadFileToGCS = async (accessToken, filename, content, mimeType="image/jpeg") => {
+    let getSignedURL = async () => {
+        const { id: userID } = await epibox.getUser()
+        const resp = await (await fetch(`${gcsUploadAPIPath}?fileName=${gcsFolderName}_${userID}/${filename}&at=${accessToken}`)).json()
+        return resp
+    }
+
+    const { url: signedURL, filePath } = await getSignedURL()
+    await fetch(signedURL, {
+        method: "PUT",
+        headers: {
+            'Content-Type': mimeType
+        },
+        body: content
+    })
+
+    return filePath
+}
+
+const updateLabelsCSV = async(gcsFilePath, label) => {
+    window.localStorage.labelsForAutoML = window.localStorage.labelsForAutoML ? window.localStorage.labelsForAutoML : "set,image_path,label"
+    const randVar = Math.random()
+    const set = randVar > 0.87 ? "TEST" : (randVar > 0.75 ? "VALIDATION" : "TRAIN")
+    const { id: userID } = await epibox.getUser()
+    window.localStorage.labelsForAutoML += `\n${set},${gcsFilePath},${label}`
+    if(window.localStorage.labelsForAutoML.split("\n").length > 50) {
+        const labelsForAutoML = window.localStorage.labelsForAutoML.split("\n")
+        const labelsForAutoMLCounts = labelsForAutoML.slice(1).reduce((obj, curr) => {
+            const row = curr.split(",")
+            obj[row[row.length - 1]] = obj[row[row.length - 1]] ? obj[row[row.length - 1]] + 1 : 1
+            return obj
+        }, {})
+        if (Object.values(labelsForAutoMLCounts).length >= 2 && Object.values(labelsForAutoMLCounts).every(count => count > 10)) {
+            const startAutoMLButton = document.getElementById('startAutoMLBtn')
+            startAutoMLButton.removeAttribute("disabled")
+        }
+    }
+}
+
+const startAutoMLTraining = async () => {
+    const startAutoMLButton = document.getElementById('startAutoMLBtn')
+    startAutoMLButton.setAttribute("disabled", "true")
+    const accessToken = JSON.parse(window.localStorage.epiBoxToken).access_token
+    const csvFilePath = await uploadFileToGCS(accessToken, "dataset.csv", window.localStorage.labelsForAutoML, "text/csv")
+    await fetch(`${automlAPIPath}?csvFilePath=${csvFilePath}&at=${accessToken}`)
 }
 
 const uploadNewVersion = async (accessToken, fileId, formData) => {
