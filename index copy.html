@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Downscale SVS</title>
+</head>
+<body>
+    <pre id="epibox_msg"></pre>
+    <button onclick="epibox.login()">Login</button>
+    <button onclick="epibox.checkToken()">Check</button>
+    <button onclick="epibox.refreshToken()">Refresh</button>
+    <button onclick="(async function(){await epibox.getUser();if(epibox.oauth){epibox.msg(JSON.stringify(epibox.oauth.user,null,3))}})()">User</button>
+    <button onclick="epibox.logout()">Logout</button>
+    <button onclick="localStorage.removeItem('epiboxtoken');location.reload()">Restart</button>
+    <button id="train">Train Model</button>
+    <div class="row">
+        <form action="post" id="folderIds">
+            <div style="display:grid; grid-template-columns: 20rem 20rem; grid-template-rows: auto auto; row-gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 8rem 10rem;">
+                    <label for="inputFolderId">Input Folder ID:</label>
+                    <input type="text" required pattern="^[0-9]{12}$" id="inputFolderId" value="156562380907" placeholder="BOX input folder ID">
+                </div>
+                <div style="display: grid; grid-template-columns: 7rem 10rem;">
+                    <label for="inputLabelsCSV">Labels File ID:</label>
+                    <input type="text" pattern="^[0-9]{12}$" id="inputLabelsCSV" value="959041299209" placeholder="BOX Labels File ID">
+                </div>
+                <div style="display: grid; grid-template-columns: 8rem 10rem;">
+                    <label for="outputFolderId">Output Folder ID:</label>
+                    <input type="text" required pattern="^[0-9]{12}$" id="outputFolderId" value="160906438490" placeholder="BOX output folder ID">
+                </div>
+            </div>
+            <br>
+            <div class="mr-top-10">
+                <input type="radio" checked name="extractTiles" value="allTiles" id="extractAllTiles">
+                <label for="extractAllTiles">Extract all tile(s)</label>
+                <input type="radio" name="extractTiles" value="randomTiles" id="randomlySelectTiles">
+                <label for="randomlySelectTiles">Random tiles</label>
+            </div>
+            <div class="slidecontainer mr-top-10 mr-bottom-10" id="tileRangeSelector">
+                <input type="range" min="0" max="96" value="8" step="8" class="slider" id="myRange">
+                <span id="sliderValue">8 tiles</span>
+            </div>
+            <button type="submit">Extract tile(s)</button>
+        </form>
+        <div class="new-line" style="margin-top: 1rem;" id="fileSelectionDiv"></div>
+    </div>
+    
+    <script src = "localforage.js"></script>
+    <script src = "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.5.1/dist/tfjs-vis.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/openseadragon@latest/build/openseadragon/openseadragon.js"></script>
+    <script src="https://episphere.github.io/epibox/epibox.js"></script>
+    <script src="./index.js" type="module"></script>
+</body>
+</html>
