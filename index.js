@@ -1,3 +1,4 @@
+
 import imagebox3 from "https://episphere.github.io/imagebox3/imagebox3.mjs";
 // import imagebox3 from "http://localhost:8081/imagebox3.mjs";
 const lowerThreshold = 150;
@@ -11,7 +12,8 @@ let database = []
 let databaseX = []
 let databaseY = []
 let globalKeys = []
-let result = []
+let fileNames = new Set()
+let numPresses = 0
 
 const gcsUploadAPIPath = "https://us-east4-dl-test-tma.cloudfunctions.net/gcs-upload"
 const gcsFolderName = "test-folder"
@@ -574,7 +576,7 @@ const extractRandomTile = async ([tilex, tiley], widthIncrements, heightIncremen
     })
 }
 
-const canvasEvents = () => {
+const canvasEvents = async () => {
     const canvases = Array.from(document.querySelectorAll('canvas.uploadCanvas'));
     canvases.forEach(canvas => {
         canvas.addEventListener('click', e => {
@@ -745,7 +747,10 @@ function addToDatabase(data) {
     let X = document.getElementsByClassName('tile-thumbnail-selected uploadCanvas tile-thumbnail') || null;
     for (let i = 0; i < X.length; i++) {
         X[i].toBlob(function(blob) {
-            localforage.setItem(X[i].toDataURL(), X[i].getAttribute('data-label'));
+            localforage.setItem(X[i].toDataURL(), {
+                'data-label': X[i].getAttribute('data-label'),
+                'fileName': X[i].getAttribute('data-file-name')
+            })
         })
     }
 }
@@ -841,24 +846,32 @@ function getModel() {
 var buttonMobile = document.getElementById('mobile');
 
 buttonMobile.onclick = async function () {
+    numPresses = numPresses + 1
     await addFromIndexDb();
 
+
     for (let i = 0; i < globalKeys.length; i++) {
-        localforage.getItem(globalKeys[i]).then(res => {
-            if (res === "POT1"){
+        let res = await localforage.getItem(globalKeys[i])
+        if (!fileNames.has(res['fileName']) || numPresses <= 1) {
+            if (res['data-label'] === "POT1"){
                 databaseY.push(1)
             } else {
                 databaseY.push(0)
             }
-        })
+            await imageToTensorMobile(globalKeys[i])
+        }
     }
 
-    for (let i = 0; i < globalKeys.length; i++) {
-        await imageToTensorMobile(globalKeys[i])
-    }
+    await localforage.iterate(function (value, key, iterationNumber) {
+        fileNames.add(value.fileName)
+    })
 
     console.log(databaseX)
     console.log(databaseY)
+
+    let sum = databaseY.reduce((pSum, a) => pSum + a, 0)
+    alert(`The database you created has ${databaseY.length} elements,
+    ${sum} elements belonging to POT1, and ${databaseY.length-sum} belonging to NON-POT1`)
     
     let featureModel = await loadMobileNetFeatureModel();
     let predictFeatures = featureModel.predict(tf.stack(databaseX))
@@ -903,24 +916,24 @@ buttonMobile.onclick = async function () {
 var button = document.getElementById('train');
 
 button.onclick = async function () {
+    numPresses = numPresses + 1;
     await addFromIndexDb();
 
     for (let i = 0; i < globalKeys.length; i++) {
-        //console.log('TEST')
-        localforage.getItem(globalKeys[i]).then(res => {
-            //console.log('Updating databaseY')
-            if (res === "POT1"){
+        let res = await localforage.getItem(globalKeys[i])
+        if (!fileNames.has(res['fileName']) || numPresses <= 1) {
+            if (res['data-label'] === "POT1"){
                 databaseY.push(1)
             } else {
                 databaseY.push(0)
             }
-        })
+            await imageToTensor(globalKeys[i])
+        }
     }
 
-    
-    for (let i = 0; i < globalKeys.length; i++) {
-        await imageToTensor(globalKeys[i])
-    }
+    await localforage.iterate(function (value, key, iterationNumber) {
+        fileNames.add(value.fileName)
+     })
 
     console.log(databaseY.length)
     console.log(databaseX.length)
