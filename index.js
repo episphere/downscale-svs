@@ -12,6 +12,8 @@ let database = []
 let databaseX = []
 let databaseY = []
 let globalKeys = []
+let samples = []
+let labels = []
 let fileNames = new Set()
 let numPresses = 0
 
@@ -743,38 +745,56 @@ const uploadNewVersion = async (accessToken, fileId, formData) => {
     });
 }
 
-function addToDatabase(data) {
+async function addToDatabase(data) {
     let X = document.getElementsByClassName('tile-thumbnail-selected uploadCanvas tile-thumbnail') || null;
+    const accessToken = JSON.parse(localStorage.epiBoxToken).access_token;
+    console.log('Starting Tile Loading...')
     for (let i = 0; i < X.length; i++) {
-        X[i].toBlob(function(blob) {
-            localforage.setItem(X[i].toDataURL(), {
+        const tileParams = {
+            'tileX': X[i].dataset.tileX,
+            'tileY': X[i].dataset.tileY,
+            'tileWidth': X[i].dataset.tileWidth,
+            'tileHeight': X[i].dataset.tileHeight,
+            'tileSize': 512
+        }
+        const select = document.getElementById('fileSelection');
+        const imageURL = await getDownloadURL(accessToken, select.value)
+        const blob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
+
+        var reader = new FileReader()
+        reader.readAsDataURL(blob);
+        reader.onloadend = function () {
+            var base64String = reader.result;
+            localforage.setItem(X[i].getAttribute('data-file-name'), {
                 'data-label': X[i].getAttribute('data-label'),
-                'fileName': X[i].getAttribute('data-file-name')
+                'base64': base64String
             })
-        })
+        }
+        console.log(`Image ${i+1} loaded of ${X.length}`)
     }
 }
 
 function getModel() { 
     let model = tf.sequential();
-    const IMAGE_WIDTH = 256; 
-    const IMAGE_HEIGHT = 256; 
+    const IMAGE_WIDTH = 512; 
+    const IMAGE_HEIGHT = 512; 
     const IMAGE_CHANNELS = 3;
 
-    model.add( tf.layers.depthwiseConv2d({ inputShape: [IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS], 
-        kernelSize: 3, filters: 8, activation: 'relu'}));
-    model.add(tf.layers.averagePooling2d({poolSize: 2, strides: 2}))
-    model.add( tf.layers.depthwiseConv2d({kernelSize: 3, filters: 12, activation: 'relu'}) );
-    model.add( tf.layers.depthwiseConv2d({kernelSize: 3, filters: 16, activation: 'relu'}) );
-    model.add(tf.layers.averagePooling2d({poolSize: 2, strides: 2}))
-    model.add( tf.layers.depthwiseConv2d({kernelSize: 3, filters: 32, activation: 'relu'}) );
-    model.add(tf.layers.averagePooling2d({poolSize: 2, strides: 2}))
-    model.add(tf.layers.flatten({}));
-    model.add(tf.layers.dense({units: 28, activation: 'relu'}, tf.regularizers.l1()));
-    model.add(tf.layers.dropout(0.4))
-    model.add(tf.layers.dense({units: 14, activation: 'relu'}, tf.regularizers.l1()));
-    model.add(tf.layers.dense({units: 1, activation: 'sigmoid'}));
+    model.add(tf.layers.conv2d({inputShape: [IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS],
+        kernelSize: 3, filters: 8, activation:'relu'}));
+    //model.add(tf.layers.conv2d({kernelSize: 3, filters: 16, activation: 'relu'}))
+    model.add(tf.layers.maxPooling2d({poolSize: [2,2]}))
+    model.add(tf.layers.conv2d({kernelSize: 3, filters: 32, activation: 'relu'}))
+    model.add(tf.layers.maxPooling2d({poolSize: [2,2]}))
+    model.add(tf.layers.conv2d({kernelSize: 3, filters: 64, activation: 'relu'}))
+    model.add(tf.layers.maxPooling2d({poolSize: [2,2]}))
+    model.add(tf.layers.conv2d({kernelSize: 3, filters: 128, activation: 'relu'}))
+    model.add(tf.layers.maxPooling2d({poolSize: [2,2]}))
+    model.add(tf.layers. flatten({}));
+    model.add(tf.layers.dense({units: 1, activation:'sigmoid'}));
 
+    
+    
     model.compile({
         optimizer: 'adam',
         loss: 'binaryCrossentropy',
@@ -793,7 +813,9 @@ function getModel() {
         image.height = MOBILE_NET_INPUT_HEIGHT;
         tf.tidy(() => {
             image.onload = () => {
-                let tensor = tf.browser.fromPixels(image);
+                let tensor = tf.cast(tf.browser.fromPixels(image), 'float32');
+                let flippedTensor = tf.reverse(tensor)
+                databaseX.push(tf.cast(flippedTensor, 'float32'))
                 resolve(databaseX.push(tf.cast(tensor, 'float32')))
             }
         })
@@ -801,27 +823,24 @@ function getModel() {
     })
  }
 
- async function imageToTensor(URL) {
+function imageToTensor(URL) {
     return new Promise((resolve, reject) => {
         let image = new Image();
         image.src = URL
-        tf.tidy(() => {
-            image.onload = () => {
-                let tensor = tf.browser.fromPixels(image);
-                resolve(databaseX.push(tf.cast(tensor, 'float32')))
-            }
-        })
-       
+        image.onload = () => {
+            let tensor = tf.browser.fromPixels(image);
+            resolve(databaseX.push(tensor))
+        }
     })
+
  }
 
- async function addFromIndexDb() {
-    return new Promise ((resolve, reject) => {
+ function addFromIndexDb() {
+    return new Promise ( (resolve, reject) => {
         localforage.keys()
         .then((keys) => {
-            resolve(globalKeys.push(...keys))
-            //console.log(globalKeys)
-        })
+        resolve(globalKeys.push(...keys))
+    })
     })
  }
 
@@ -843,49 +862,108 @@ function getModel() {
     return mobilenet;
   }
 
+// Source: https://www.geeksforgeeks.org/how-to-shuffle-an-array-using-javascript/
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+    
+        // Generate random number
+        var j = Math.floor(Math.random() * (i + 1));
+                    
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }        
+    return array;
+ }
+
+
 var buttonMobile = document.getElementById('mobile');
 
 buttonMobile.onclick = async function () {
-    numPresses = numPresses + 1
+    numPresses = numPresses + 1;
     await addFromIndexDb();
 
+    globalKeys = shuffleArray(globalKeys)
 
     for (let i = 0; i < globalKeys.length; i++) {
         let res = await localforage.getItem(globalKeys[i])
-        if (!fileNames.has(res['fileName']) || numPresses <= 1) {
+        if (!fileNames.has(globalKeys[i]) || numPresses <= 1) {
             if (res['data-label'] === "POT1"){
+                databaseY.push(1)
                 databaseY.push(1)
             } else {
                 databaseY.push(0)
+                databaseY.push(0)
             }
-            await imageToTensorMobile(globalKeys[i])
+            await imageToTensorMobile(res['base64'])
         }
     }
 
     await localforage.iterate(function (value, key, iterationNumber) {
-        fileNames.add(value.fileName)
-    })
+        fileNames.add(key)
+     })
 
     console.log(databaseX)
+    console.log(databaseX[0].print())
     console.log(databaseY)
 
     let sum = databaseY.reduce((pSum, a) => pSum + a, 0)
     alert(`The database you created has ${databaseY.length} elements,
     ${sum} elements belonging to POT1, and ${databaseY.length-sum} belonging to NON-POT1`)
+
+    samples = await tf.stack(databaseX)
+    labels = await tf.stack(databaseY)
+
+    console.log(samples.shape)
+    console.log(labels.shape)
+
     
     let featureModel = await loadMobileNetFeatureModel();
-    let predictFeatures = featureModel.predict(tf.stack(databaseX))
+    let predictFeatures = featureModel.predict(samples)
+    tf.dispose(samples)
+    tf.dispose(databaseX)
 
     // Adding additional layers for transfer learning
     let model = tf.sequential();
-    model.add(tf.layers.dense({inputShape: [1024], units: 256, activation: 'relu'}));
-    model.add(tf.layers.dense({units: 128, activation: 'relu'}, tf.regularizers.l1()));
-    model.add(tf.layers.dropout(0.4))
-    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1()));
+    model.add(tf.layers.dense({inputShape: [1024], units: 600, activation: 'relu'}));
+    model.add(tf.layers.dropout(0.5))
+    model.add(tf.layers.gaussianNoise(0.2))
+    model.add(tf.layers.dense({units: 300, activation: 'relu'}, ));
+    model.add(tf.layers.dropout(0.5))
+    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
+    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
     model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1()));
-    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1()));
-    model.add(tf.layers.dense({units: 8, activation: 'relu'}, tf.regularizers.l1()));
+    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
+    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
+    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
+    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
+    model.add(tf.layers.dropout(0.2))
+    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dropout(0.2))
+    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dropout(0.2))
+    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dropout(0.2))
+    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dropout(0.2))
+    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dropout(0.2))
+    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dropout(0.2))
+    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dropout(0.2))
+    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
     model.add(tf.layers.dense({units: 1, activation: 'sigmoid'}))
 
     console.log(model.summary())
@@ -905,39 +983,127 @@ buttonMobile.onclick = async function () {
     const fitCallbacks = tfvis.show.fitCallbacks(container, metrics);
 
     let results = await model.fit(predictFeatures, tf.stack(databaseY), {
-        epochs: 20,
+        epochs: 35,
         batchSize: 32,
         validationSplit: 0.3,
         shuffle: true,
         callbacks: fitCallbacks
+    }).then(() => {
+        tf.dispose(predictFeatures)
+        tf.dispose(databaseY)
     })
 }
 
 var button = document.getElementById('train');
 
+// button.onclick = async function () {
+//     // Memory at the beginning
+//     console.log("BEFORE: " + tf.memory().numTensors)
+//     numPresses = numPresses + 1;
+//     // adding to globalKeys
+//     await addFromIndexDb();
+
+//     // shuffling the array
+//     globalKeys = shuffleArray(globalKeys)
+
+//     alert('Starting Model Training')
+
+//     let model = getModel();
+//     model.summary()
+
+//     for (let i = 0; i < globalKeys.length; i++) {
+//         let res = await localforage.getItem(globalKeys[i])
+//         if (!fileNames.has(globalKeys[i]) || numPresses <= 1) {
+//             if (res['data-label'] === "POT1"){
+//                 databaseY.push(1)
+//             } else {
+//                 databaseY.push(0)
+//             }
+//             // converts the image to tensors (databaseX)
+//             await imageToTensor(res['base64'])
+//             console.log(databaseX)
+//             console.log(databaseY)
+//         }
+
+//         // Trains in batches of 20
+//         if (i != 0 && i % 20 === 0) {
+//             console.log(databaseX.length)
+//             console.log(databaseY.length)
+            
+//             let inputs = tf.stack(databaseX)
+//             let labels = tf.stack(databaseY)
+            
+//             // do not need these arrays anymore
+//             tf.dispose(databaseX)
+//             tf.dispose(databaseY)
+
+//             databaseX = []
+//             databaseY = []
+
+//             // check to see if arrays have cleared succesfully
+//             // console.log('databaseX ' + databaseX)
+//             // console.log('databaseY ' + databaseY)
+
+//             const metrics = ['loss', 'val_loss', 'acc', 'val_acc'];
+//             const container = {
+//                 name: 'Model Training', tab: 'Model', styles: { height: '1000px' }
+//             };
+//             const fitCallbacks = tfvis.show.fitCallbacks(container, metrics);
+
+            
+//             let results = await model.fit(inputs, labels, {
+//                     epochs: 5,
+//                     batchSize: 32,
+//                     verbose: 1,
+//                     validationSplit: 0.2,
+//                     shuffle: true,
+//                     callbacks: [fitCallbacks]
+//                 })
+            
+//             console.log(history)
+//             tf.dispose(inputs)
+//             tf.dispose(labels)
+//             //tf.dispose(model)
+//             console.log("AFTER: " + tf.memory().numTensors)
+//         }
+//     }
+
+//     await localforage.iterate(function (value, key, iterationNumber) {
+//         fileNames.add(key)
+//      })
+
+//     console.log("AFTER: " + tf.memory().numTensors)
+// }
+
+
 button.onclick = async function () {
     numPresses = numPresses + 1;
     await addFromIndexDb();
+
+    console.log(globalKeys)
 
     for (let i = 0; i < globalKeys.length; i++) {
         let res = await localforage.getItem(globalKeys[i])
         if (!fileNames.has(res['fileName']) || numPresses <= 1) {
             if (res['data-label'] === "POT1"){
                 databaseY.push(1)
+                //databaseY.push(1)
             } else {
                 databaseY.push(0)
+                //databaseY.push(0)
             }
-            await imageToTensor(globalKeys[i])
+            await imageToTensor(res.base64)
         }
     }
 
     await localforage.iterate(function (value, key, iterationNumber) {
         fileNames.add(value.fileName)
-     })
+    })
 
     console.log(databaseY.length)
     console.log(databaseX.length)
     console.log(databaseX[1].print())
+    console.log(databaseX[1].shape)
 
 
     let model = getModel();
@@ -956,15 +1122,15 @@ button.onclick = async function () {
 
     let results = await model.fit(tf.stack(databaseX), tf.stack(databaseY), {
         epochs: 20,
-        batchSize: 32,
-        validationSplit: 0.3,
+        batchSize: 16,
+        validationSplit: 0.2,
         shuffle: true,
-        callbacks: fitCallbacks
+        callbacks: [fitCallbacks, tf.memory]
     })
-
 }
+    
+
 
 window.onload = () => {
     initialize();
 }
-
