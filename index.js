@@ -12,8 +12,8 @@ let database = []
 let databaseX = []
 let databaseY = []
 let globalKeys = []
-let samples = []
-let labels = []
+// let samples = []
+// let labels = []
 let fileNames = new Set()
 let numPresses = 0
 
@@ -911,8 +911,8 @@ buttonMobile.onclick = async function () {
     alert(`The database you created has ${databaseY.length} elements,
     ${sum} elements belonging to POT1, and ${databaseY.length-sum} belonging to NON-POT1`)
 
-    samples = await tf.stack(databaseX)
-    labels = await tf.stack(databaseY)
+    const samples = await tf.stack(databaseX)
+    const labels = await tf.stack(databaseY)
 
     console.log(samples.shape)
     console.log(labels.shape)
