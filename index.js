@@ -582,22 +582,22 @@ const extractRandomTile = async ([tilex, tiley], widthIncrements, heightIncremen
 const addEvents = async (canvas) => {
     // const canvases = Array.from(document.querySelectorAll('canvas.uploadCanvas'));
     // canvases.forEach(canvas => {
-        canvas.addEventListener('click', e => {
-            e.stopPropagation();
-            if(canvas.classList.contains('tile-thumbnail-selected')) {
-                canvas.classList.remove('tile-thumbnail-selected');
-            }
-            else {
-                canvas.classList.add('tile-thumbnail-selected');
+    canvas.addEventListener('click', e => {
+        e.stopPropagation();
+        if(canvas.classList.contains('tile-thumbnail-selected')) {
+            canvas.classList.remove('tile-thumbnail-selected');
+        }
+        else {
+            canvas.classList.add('tile-thumbnail-selected');
             addToDatabase(canvas)
-            }
+        }
 
-            const selectedTiles = Array.from(document.querySelectorAll('.tile-thumbnail-selected'));
-            if(selectedTiles.length > 0)
-                document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length} tile(s) to:`;
-            else
-                document.getElementById('uploadImage').innerHTML = `Upload all tiles to:`;
-        });
+        const selectedTiles = Array.from(document.querySelectorAll('.tile-thumbnail-selected'));
+        if(selectedTiles.length > 0)
+            document.getElementById('uploadImage').innerHTML = `Upload ${selectedTiles.length} tile(s) to:`;
+        else
+            document.getElementById('uploadImage').innerHTML = `Upload all tiles to:`;
+    });
     // });
 }
 
@@ -778,14 +778,14 @@ async function addToDatabase(canvas) {
         canvas.toBlob((blob) => {
             // const url = window.URL.createObjectURL(blob)
             const reader = new FileReader()
-        reader.readAsDataURL(blob);
-        reader.onloadend = function () {
-            var base64String = reader.result;
+            reader.readAsDataURL(blob);
+            reader.onloadend = function () {
+                var base64String = reader.result;
                 localforage.setItem(canvas.getAttribute('data-file-name'), {
                     'data-label': canvas.getAttribute('data-label'),
-                'base64': base64String
-            })
-        }
+                    'base64': base64String
+                })
+            }
             // console.log(`Image ${i+1} loaded of ${X.length}`)
         })
     }
@@ -829,13 +829,14 @@ function getModel() {
         image.src = URL
         image.width = MOBILE_NET_INPUT_WIDTH;
         image.height = MOBILE_NET_INPUT_HEIGHT;
-            image.onload = () => {
+        image.onload = () => {
+            tf.tidy(() => {
                 let tensor = tf.cast(tf.browser.fromPixels(image), 'float32');
                 let flippedTensor = tf.reverse(tensor)
                 databaseX.push(tf.cast(flippedTensor, 'float32'))
                 resolve(databaseX.push(tf.cast(tensor, 'float32')))
-            }
-        })
+            })
+        }
        
     })
  }
@@ -942,46 +943,46 @@ buttonMobile.onclick = async function () {
 
     // Adding additional layers for transfer learning
     let model = tf.sequential();
-    model.add(tf.layers.dense({inputShape: [1024], units: 600, activation: 'relu'}));
-    model.add(tf.layers.dropout(0.5))
-    model.add(tf.layers.gaussianNoise(0.2))
-    model.add(tf.layers.dense({units: 300, activation: 'relu'}, ));
-    model.add(tf.layers.dropout(0.5))
-    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
-    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
-    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
-    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
-    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
-    model.add(tf.layers.dense({units: 1, activation: 'sigmoid'}))
+    model.add(tf.layers.dense({inputShape: [1024], units: 128, activation: 'relu'}));
+    // model.add(tf.layers.dropout(0.5))
+    // model.add(tf.layers.gaussianNoise(0.2))
+    // model.add(tf.layers.dense({units: 300, activation: 'relu'}, ));
+    // model.add(tf.layers.dropout(0.5))
+    // model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
+    // model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
+    // model.add(tf.layers.dropout(0.2))
+    // model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
+    // model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
+    // model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
+    // model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
+    // model.add(tf.layers.dropout(0.2))
+    // model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dropout(0.2))
+    // model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dropout(0.2))
+    // model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dropout(0.2))
+    // model.add(tf.layers.dense({units: 64, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dropout(0.2))
+    // model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dropout(0.2))
+    // model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dense({units: 32, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dropout(0.2))
+    // model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dropout(0.2))
+    // model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
+    // model.add(tf.layers.dense({units: 16, activation: 'relu'}, tf.regularizers.l1l2()));
+    model.add(tf.layers.dense({units: 1, activation: 'softmax'}))
 
     console.log(model.summary())
 
@@ -1006,8 +1007,8 @@ buttonMobile.onclick = async function () {
         shuffle: true,
         callbacks: fitCallbacks
     }).then(() => {
-        tf.dispose(predictFeatures)
-        tf.dispose(databaseY)
+    tf.dispose(predictFeatures)
+    tf.dispose(databaseY)
     })
 }
 
