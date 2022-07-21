@@ -298,9 +298,10 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName, fileId) => {
             x = x - Math.floor(scaledWidth / 2);
             y = y - Math.floor(scaledHeight / 2);
             const fileName = imageName.replaceAll(".", "_") + `_${x}_${y}_${Math.max(scaledWidth, scaledHeight)}_1024_${magnificationLevel}_${i+1}.jpg`;
-            await extractRandomTile([x, y], scaledWidth, scaledHeight, imageURL, imageDiv, fileName, fileId);
+            const canvas = await extractRandomTile([x, y], scaledWidth, scaledHeight, imageURL, imageDiv, fileName, fileId);
+            addEvents(canvas);
+            addToDatabase(canvas)
         }
-        canvasEvents();
         handleImageUpload(imageDiv);
     }
     else if(magnification === '0') {
@@ -333,9 +334,9 @@ const renderTileThumbnail = async (imageInfo, imageURL, imageName, fileId) => {
             };
             const tileBlob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
             const fileName = imageName.substring(0, imageName.lastIndexOf('.'))+'_' +(i+1)+'.jpg';
-            await canvasHandler(tileBlob, fileName, tileParams.tileSize, imageDiv, true);
+            const canvas = await canvasHandler(tileBlob, fileName, tileParams.tileSize, imageDiv, true);
+            addEvents(canvas);
         }
-        canvasEvents();
         handleImageUpload(imageDiv);
     }
 }
@@ -416,7 +417,7 @@ const canvasHandler = (blob, fileName, desiredResolution, thumbnailDiv, smallerI
             if(smallerImage) canvas.classList.add("tile-thumbnail")
             else canvas.classList.add('whole-image');
             thumbnailDiv.appendChild(canvas);
-            resolve(true);
+            resolve(canvas);
         }
         
     })
@@ -572,15 +573,15 @@ const extractRandomTile = async ([tilex, tiley], widthIncrements, heightIncremen
             tileContainer.appendChild(document.createElement('br'));
             tileContainer.appendChild(label);
             imageDiv.appendChild(tileContainer);
-            resolve(true)
+            resolve(canvas)
         }
 
     })
 }
 
-const canvasEvents = async () => {
-    const canvases = Array.from(document.querySelectorAll('canvas.uploadCanvas'));
-    canvases.forEach(canvas => {
+const addEvents = async (canvas) => {
+    // const canvases = Array.from(document.querySelectorAll('canvas.uploadCanvas'));
+    // canvases.forEach(canvas => {
         canvas.addEventListener('click', e => {
             e.stopPropagation();
             if(canvas.classList.contains('tile-thumbnail-selected')) {
@@ -588,6 +589,7 @@ const canvasEvents = async () => {
             }
             else {
                 canvas.classList.add('tile-thumbnail-selected');
+            addToDatabase(canvas)
             }
 
             const selectedTiles = Array.from(document.querySelectorAll('.tile-thumbnail-selected'));
@@ -596,8 +598,7 @@ const canvasEvents = async () => {
             else
                 document.getElementById('uploadImage').innerHTML = `Upload all tiles to:`;
         });
-    });
-    addToDatabase(database)
+    // });
 }
 
 const generateXYs = (rows, cols, height, width) => {
@@ -745,33 +746,50 @@ const uploadNewVersion = async (accessToken, fileId, formData) => {
     });
 }
 
-async function addToDatabase(data) {
-    let X = document.getElementsByClassName('tile-thumbnail-selected uploadCanvas tile-thumbnail') || null;
-    const accessToken = JSON.parse(localStorage.epiBoxToken).access_token;
-    console.log('Starting Tile Loading...')
-    for (let i = 0; i < X.length; i++) {
-        const tileParams = {
-            'tileX': X[i].dataset.tileX,
-            'tileY': X[i].dataset.tileY,
-            'tileWidth': X[i].dataset.tileWidth,
-            'tileHeight': X[i].dataset.tileHeight,
-            'tileSize': 512
-        }
-        const select = document.getElementById('fileSelection');
-        const imageURL = await getDownloadURL(accessToken, select.value)
-        const blob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
+async function addToDatabase(canvas) {
+    // const tileSizeForModeling = MOBILE_NET_INPUT_WIDTH
+    // let X = document.getElementsByClassName('tile-thumbnail-selected uploadCanvas tile-thumbnail') || null;
+    // const accessToken = JSON.parse(localStorage.epiBoxToken).access_token;
+    // console.log('Starting Tile Loading...')
+    // for (let i = 0; i < X.length; i++) {
+    //     const tileParams = {
+    //         'tileX': X[i].dataset.tileX,
+    //         'tileY': X[i].dataset.tileY,
+    //         'tileWidth': X[i].dataset.tileWidth,
+    //         'tileHeight': X[i].dataset.tileHeight,
+    //         'tileSize': MOBILE_NET_INPUT_WIDTH
+    //     }
+    //     const select = document.getElementById('fileSelection');
+    //     const imageURL = await getDownloadURL(accessToken, select.value)
+    //     const blob = await (await imagebox3.getImageTile(imageURL, tileParams)).blob();
 
-        var reader = new FileReader()
+    //     var reader = new FileReader()
+    //     reader.readAsDataURL(blob);
+    //     reader.onloadend = function () {
+    //         var base64String = reader.result;
+    //         localforage.setItem(X[i].getAttribute('data-file-name'), {
+    //             'data-label': X[i].getAttribute('data-label'),
+    //             'base64': base64String
+    //         })
+    //     }
+    //     console.log(`Image ${i+1} loaded of ${X.length}`)
+    // }
+    if (canvas.classList.contains("tile-thumbnail-selected")) {
+        canvas.toBlob((blob) => {
+            // const url = window.URL.createObjectURL(blob)
+            const reader = new FileReader()
         reader.readAsDataURL(blob);
         reader.onloadend = function () {
             var base64String = reader.result;
-            localforage.setItem(X[i].getAttribute('data-file-name'), {
-                'data-label': X[i].getAttribute('data-label'),
+                localforage.setItem(canvas.getAttribute('data-file-name'), {
+                    'data-label': canvas.getAttribute('data-label'),
                 'base64': base64String
             })
         }
-        console.log(`Image ${i+1} loaded of ${X.length}`)
+            // console.log(`Image ${i+1} loaded of ${X.length}`)
+        })
     }
+    
 }
 
 function getModel() { 
@@ -811,7 +829,6 @@ function getModel() {
         image.src = URL
         image.width = MOBILE_NET_INPUT_WIDTH;
         image.height = MOBILE_NET_INPUT_HEIGHT;
-        tf.tidy(() => {
             image.onload = () => {
                 let tensor = tf.cast(tf.browser.fromPixels(image), 'float32');
                 let flippedTensor = tf.reverse(tensor)
