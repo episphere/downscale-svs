@@ -15,8 +15,9 @@
     <button onclick="(async function(){await epibox.getUser();if(epibox.oauth){epibox.msg(JSON.stringify(epibox.oauth.user,null,3))}})()">User</button>
     <button onclick="epibox.logout()">Logout</button>
     <button onclick="localStorage.removeItem('epiboxtoken');location.reload()">Restart</button>
-    <button id="train">Train Model</button>
     <button id="mobile">Train MobileNet</button>
+    <button id="predict">Predict</button>
+    <button id="download">Download Model</button>
     <div class="row">
         <form action="post" id="folderIds">
             <div style="display:grid; grid-template-columns: 20rem 20rem; grid-template-rows: auto auto; row-gap: 1rem;">
@@ -56,5 +57,6 @@
     <script src="https://cdn.jsdelivr.net/npm/openseadragon@latest/build/openseadragon/openseadragon.js"></script>
     <script src="https://episphere.github.io/epibox/epibox.js"></script>
     <script src="./index.js" type="module"></script>
+
 </body>
 </html>
