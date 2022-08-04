@@ -1,3 +1,5 @@
+
+
 import imagebox3 from "https://episphere.github.io/imagebox3/imagebox3.mjs";
 // import imagebox3 from "http://localhost:8081/imagebox3.mjs";
 const lowerThreshold = 150;
@@ -769,8 +771,9 @@ async function addToDatabase() {
         image.height = MOBILE_NET_INPUT_HEIGHT;
         tf.tidy(() => {
             image.onload = () => {
-                let tensor = tf.cast(tf.browser.fromPixels(image), 'float32');
-                resolve(databaseX.push(tf.cast(tensor, 'float32')))
+                let tensor = tf.browser.fromPixels(image).
+                toFloat().div(tf.scalar(255));
+                resolve(databaseX.push(tensor))
             }
         })
        
@@ -882,29 +885,15 @@ buttonMobile.onclick = async function () {
     let features = tf.stack(databaseX)
     let labels = tf.stack(databaseY)
     tf.dispose(databaseY)
-    let predictFeatures = featureModel.predict(features)
     tf.dispose(databaseX)
+    let predictFeatures = featureModel.predict(features)
 
     // Adding additional layers for transfer learning
     //let model = tf.sequential();
-    model.add(tf.layers.dense({inputShape: [1024], units: 300, activation: 'relu'}));
-    model.add(tf.layers.gaussianNoise(0.25))
-    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
-    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
-    model.add(tf.layers.dropout(0.5))
-    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
-    model.add(tf.layers.dense({units: 128, activation: 'relu'}, ));
-    model.add(tf.layers.dense({units: 64, activation: 'relu'}, ));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 32, activation: 'relu'}, ));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 32, activation: 'relu'}, ));
-    model.add(tf.layers.dense({units: 32, activation: 'relu'}, ));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 16, activation: 'relu'}, ));
-    model.add(tf.layers.dropout(0.2))
-    model.add(tf.layers.dense({units: 16, activation: 'relu'}, ));
-    model.add(tf.layers.dense({units: 16, activation: 'relu'}, ));
+    model.add(tf.layers.dense({inputShape: [1024], units: 128, activation: 'relu'}));
+    model.add(tf.layers.gaussianNoise(0.1))
+    model.add(tf.layers.dense({inputShape: [1024], units: 64, activation: 'relu'}))
+    model.add(tf.layers.dense({inputShape: [1024], units: 16, activation: 'relu'}))
     model.add(tf.layers.dense({units: 1, activation: 'sigmoid'}))
 
 
@@ -925,11 +914,27 @@ buttonMobile.onclick = async function () {
     const fitCallbacks = tfvis.show.fitCallbacks(container, metrics);
 
     let results = await model.fit(predictFeatures, labels, {
-        epochs: 20,
+        epochs: 15,
         batchSize: 32,
-        validationSplit: 0.2,
+        validationSplit: 0.3,
         shuffle: true,
-        callbacks: fitCallbacks
+        callbacks: [fitCallbacks, {
+            onEpochEnd: (epoch, log) => {
+                console.log(`After epoch ${epoch}...`)
+                // access the accuracy metric?
+                console.log(log)
+                // console.log(tf.metrics.binaryCrossentropy)
+                // let g = tf.grad(tf.metrics.binaryCrossentropy)
+                // g(x).print()
+                //console.log('Layers: ' + model.layers.length)
+                for (let i = 0; i < model.layers.length; i++) {
+                    if (model.layers[i].getWeights()[0] != null) {
+                        console.log(`Layer ${i} weights: `)
+                        model.layers[i].getWeights()[0].print()
+                    }
+                }
+            }
+        }]
     })
 
     if (predictOn) {
@@ -943,7 +948,8 @@ buttonMobile.onclick = async function () {
                 image.width = MOBILE_NET_INPUT_WIDTH;
                 image.height = MOBILE_NET_INPUT_HEIGHT;
                 image.onload = () => {
-                    let tensor = tf.cast(tf.browser.fromPixels(image), 'float32');
+                    let tensor = tf.browser.fromPixels(image).
+                    toFloat().div(tf.scalar(127.5));
                     let features = featureModel.predict(tensor.expandDims())
                     let prediction = model.predict(features).squeeze()
                     let confidence = prediction.arraySync()
